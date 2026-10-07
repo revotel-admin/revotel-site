@@ -340,7 +340,7 @@ def nav_html(cur):
     def a(t, p, key):
         cur_attr = ' aria-current="page"' if (cur == p or (p and cur.startswith(p + "/"))) else ""
         return f'<a href="{href(cur, p)}"{cur_attr}>{t}</a>'
-    return ('<nav class="nav" aria-label="Main">' + a("Revenue management", "revenue-management", "r") + a("Technology", "technology", "t") + a("Results", "results", "x")
+    return ('<nav class="nav" aria-label="Main">' + a("Revenue management", "revenue-management", "r") + a("Technology", "technology", "t") + a("Results", "results", "x") + a("Insights", "insights", "i")
             + a("Services", "services", "s") + a("Destinations", "destinations", "d") + a("Contact", "contact", "c")
             + f'<a class="btn primary" href="https://wa.me/{PHONE1_WA}">WhatsApp us</a></nav>')
 
