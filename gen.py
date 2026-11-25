@@ -213,6 +213,16 @@ DESTS = [
         ("Is the work done remotely?","Yes. Rates and channel work run through your systems, with regular calls to review results.")]),
 ]
 
+CORE_DESTS = list(DESTS)
+_GROUPS_CORE = {"goa": "Heritage, beaches and backwaters", "uttarakhand": "Hills and mountains", "himachal-pradesh": "Hills and mountains",
+                "madhya-pradesh": "Pilgrimage and spiritual towns", "dubai": "Outside India", "thailand": "Outside India"}
+for _d in CORE_DESTS:
+    _d["group"] = _GROUPS_CORE.get(_d["slug"], "Cities")
+DEST_GROUPS = ["Hills and mountains", "Pilgrimage and spiritual towns", "Cities", "Heritage, beaches and backwaters", "Outside India"]
+import importlib.util as _iu2
+_ls = _iu2.spec_from_file_location("locations", os.path.join(HERE, "locations.py"))
+_lm = _iu2.module_from_spec(_ls); _ls.loader.exec_module(_lm)
+DESTS = CORE_DESTS + _lm.LOCATIONS
 ALL_DEST_NAMES = [d["name"] for d in DESTS]
 OTAS = ["MakeMyTrip", "Goibibo", "Booking.com", "Agoda", "Expedia", "Yatra", "Cleartrip", "Trip.com", "Airbnb", "Tripadvisor"]
 OTA_LOGOS = [("gommt", "Go-MMT Group: MakeMyTrip, Goibibo, redBus", "#ffffff"), ("booking", "Booking.com", "#ffffff"), ("agoda", "Agoda", "#ffffff"),
@@ -243,8 +253,8 @@ HOME_FAQS = [
 # ===== tech data + helpers (inserted before helpers) =====
 TECH = [
  dict(slug="foodle-plus", name="Foodle+ (FP)", short="Our AI hotel PMS, guest experience system (GEMS) and POS, built with AI and powered by automation.",
-  title="Foodle+ | AI Hotel PMS & Guest Experience System (GEMS) | Revotel",
-  desc="Foodle+ is a hotel PMS, guest experience management system (GEMS) and POS built with AI and powered by automation. Syncs with STAAH and Aiosell. Guests scan a QR code in five languages.",
+  title="Foodle+ Cloud PMS & Guest Experience Management System (GEMS) | Revotel",
+  desc="Foodle+ is a cloud-based hotel PMS, guest experience management system (GEMS) and POS built with AI and automation. A PMS that works with STAAH and Aiosell, for hotels, resorts and B&Bs in India.",
   h1="Foodle+: AI hotel PMS, guest experience system and POS",
   intro="Foodle+ (FP) is a hotel PMS, guest experience management system (GEMS) and POS, built with AI and powered by automation. It syncs with the STAAH and Aiosell channel managers. Use the PMS, the GEMS, or both, depending on what your hotel needs.",
   faqs=[("What is Foodle+?","Foodle+ is a hotel PMS and guest experience management system (GEMS), built by Revotel. Guests use a QR code to make requests, and AI and automation route those requests to the PMS or to WhatsApp."),
@@ -252,22 +262,28 @@ TECH = [
         ("Does Foodle+ work with my channel manager?","Foodle+ syncs with STAAH and Aiosell. If you use another channel manager, ask us and we will check."),
         ("Can I use only the guest experience part?","Yes. The GEMS can run as a standalone product. You can also use the PMS alone, or the PMS integrated with your STAAH or Aiosell channel manager."),
         ("Which languages does the guest QR system support?","Five languages, including Hindi and English. Ask us for the full list."),
+        ("Is Foodle+ a cloud-based PMS?","Yes. Foodle+ is a cloud-based hotel PMS, so your team can use it on the front-desk computer or on a phone."),
+        ("Is Foodle+ a PMS that works with STAAH?","Yes. Foodle+ syncs with STAAH and Aiosell. See our page on a PMS compatible with STAAH."),
+        ("Is Foodle+ suitable for hotels, resorts and B&Bs?","Foodle+ is built for independent hotels and resorts, and the PMS, POS and guest system can be used together or separately. Send your room count and we will recommend a setup."),
         ("How is Foodle+ priced?","Send us your room count and what you need and we will send a quote. Book a demo on WhatsApp to see the product first.")]),
  dict(slug="hotel-pms", name="Hotel PMS", short="Property management system with AI doing the analysis and backend work.",
-  title="AI Hotel PMS Software in India | Foodle+ Property Management System",
-  desc="Foodle+ is a hotel property management system (PMS) with AI handling analysis and backend work. Compatible with STAAH and Aiosell channel managers. Built for independent hotels and resorts.",
+  title="AI Hotel PMS Software in India | Cloud PMS for Hotels, Resorts & B&Bs | Foodle+",
+  desc="Foodle+ is a cloud-based hotel PMS with AI handling analysis and backend work. A PMS compatible with STAAH and Aiosell, built for independent hotels, resorts and B&Bs in India.",
   h1="Hotel PMS software with AI behind it",
   intro="A property management system is what your front office runs on: reservations, rooms and guests in one place. The Foodle+ PMS adds AI that does the analysis and backend work, so your team spends less time on reports and more time with guests.",
   faqs=[("What is a hotel PMS?","A property management system is the software a hotel uses to manage reservations, rooms, guests and front-desk work in one place."),
+        ("What is the best cloud PMS for a hotel?","It depends on your property. See our guide to choosing a cloud PMS by property type."),
+        ("Is there a premium PMS for luxury hotels?","Premium properties should look for guest self-service, upgrades and upsells, multi-language support and clean data. Foodle+ offers a QR-based guest experience system with room upgrades and in-room dining."),
         ("What does the AI do in the Foodle+ PMS?","The AI handles analysis and backend work for the PMS, so managers get the picture without building reports by hand."),
         ("Can the PMS connect to my channel manager?","Foodle+ is compatible with STAAH and Aiosell channel managers."),
         ("Is it suitable for a small independent hotel?","Foodle+ is built for independent hotels and resorts. Send your room count and we will recommend what you need.")]),
  dict(slug="guest-experience-system", name="Guest experience system (GEMS)", short="QR-based guest requests routed by automation and AI to the PMS or WhatsApp.",
-  title="Hotel Guest Experience Management System (GEMS) with QR & WhatsApp | Revotel",
-  desc="A QR-based guest experience management system for hotels. Guests scan, AI and automation route requests straight to your PMS or to WhatsApp via Meta integration.",
+  title="Guest Experience Management System (GEMS) for Hotels: QR & WhatsApp | Revotel",
+  desc="GEMS, a guest experience management system for hotels. Guests scan a QR code in five languages to order services, in-room dining, upgrades and reviews. Works with or without a PMS.",
   h1="Guest experience management system (GEMS) for hotels",
   intro="Guests scan a QR code in the room or at the property and send a request. Automation and AI understand it and send it straight to the PMS, or to WhatsApp if your hotel is connected through Meta. No calls to the front desk, and nothing gets lost.",
-  faqs=[("How does a guest use the GEMS?","The guest scans a QR code with their phone and uses it to order services, send housekeeping requests, order in-room dining, ask for a room upgrade or leave a review. The service is offered in five languages."),
+  faqs=[("What is a guest experience management system (GEMS)?","A GEMS lets hotel guests make requests, order services and leave feedback from their own phone, usually by scanning a QR code. In Foodle+ the requests go to the PMS or to WhatsApp."),
+        ("How does a guest use the GEMS?","The guest scans a QR code with their phone and uses it to order services, send housekeeping requests, order in-room dining, ask for a room upgrade or leave a review. The service is offered in five languages."),
         ("Where do the requests go?","Requests go to the Foodle+ PMS. If your hotel has WhatsApp connected through Meta, they are also delivered on WhatsApp."),
         ("What role does AI play?","Automation and AI read the request and send it to the right place, so staff receive clear tasks instead of phone calls."),
         ("Can GEMS be used without the Foodle+ PMS?","Yes. The GEMS is available as a standalone product, or together with the Foodle+ PMS.")]),
@@ -324,6 +340,39 @@ def crumb_schema(items):
     return {"@context": "https://schema.org", "@type": "BreadcrumbList",
             "itemListElement": [{"@type": "ListItem", "position": i + 1, "name": n, "item": BASE + ("/" if p == "" else "/" + p + "/")} for i, (n, p) in enumerate(items)]}
 
+OFFICES = [
+    dict(city="Dehradun", region="Uttarakhand", lines=["2nd Floor, 1 GMS Road, Towno", "Ballupur, Dehradun 248001"],
+         maps="https://www.google.com/maps/search/?api=1&query=" + "2nd+Floor%2C+1+GMS+Road%2C+Ballupur%2C+Dehradun+248001"),
+    dict(city="Ghaziabad", region="Uttar Pradesh", lines=[], maps=""),
+    dict(city="Goa", region="Goa", lines=[], maps=""),
+]
+
+def offices_html(heading="Our offices", cls="offices"):
+    cards = ""
+    for o in OFFICES:
+        addr = "".join(f"<span>{e(l)}</span>" for l in o["lines"]) or (f'<span class="muted">{e(o["region"])}</span>' if o["region"] != o["city"] else '<span class="muted">Address on request</span>')
+        link = f'<a class="more" href="{o["maps"]}" rel="noopener" target="_blank">Open in Maps</a>' if o["maps"] else ""
+        cards += f'<li><h3>{e(o["city"])}</h3><address>{addr}</address>{link}</li>'
+    return f'<section class="section"><div class="split"><div class="stack"><h2>{e(heading)}</h2><p class="muted">Revotel works from Dehradun, Ghaziabad and Goa, and travels to properties across India, Dubai and Thailand.</p></div><ul class="{cls}">{cards}</ul></div></section>'
+
+import re as _re0
+def label_tables(h):
+    def one(m):
+        t = m.group(0)
+        heads = [_re0.sub(r"<[^>]+>", "", x).strip() for x in _re0.findall(r"<th[^>]*>(.*?)</th>", t, flags=_re0.S)]
+        if not heads:
+            return t
+        def row(rm):
+            i = [-1]
+            def cell(cm):
+                i[0] += 1
+                lab = heads[i[0]] if i[0] < len(heads) else ""
+                return cm.group(0).replace("<td", '<td data-label="' + html.escape(lab, quote=True) + '"', 1)
+            return _re0.sub(r"<td[^>]*>", cell, rm.group(0))
+        body_i = t.find("<tbody>")
+        return t[:body_i] + _re0.sub(r"<tr>.*?</tr>", row, t[body_i:], flags=_re0.S)
+    return _re0.sub(r"<table>.*?</table>", one, h, flags=_re0.S)
+
 ORG = {
     "@context": "https://schema.org", "@type": "ProfessionalService", "@id": BASE + "/#org",
     "name": "Revotel", "url": BASE + "/",
@@ -334,6 +383,10 @@ ORG = {
                    {"@type": "City", "name": "Dubai"}, {"@type": "Country", "name": "Thailand"}],
     "serviceType": ["Hotel revenue management", "Hotel PMS software", "Guest experience management system", "Channel manager setup", "Hotel consulting", "Hotel planning and development", "OTA management", "Hotel photography and content writing", "Hotel reputation management", "Hotel staff training"],
     "sameAs": ["https://www.facebook.com/revotel.in/", "https://www.linkedin.com/in/revotel"],
+    "address": {"@type": "PostalAddress", "streetAddress": "2nd Floor, 1 GMS Road, Towno, Ballupur", "addressLocality": "Dehradun", "addressRegion": "Uttarakhand", "postalCode": "248001", "addressCountry": "IN"},
+    "location": [{"@type": "Place", "name": "Revotel Dehradun", "address": {"@type": "PostalAddress", "streetAddress": "2nd Floor, 1 GMS Road, Towno, Ballupur", "addressLocality": "Dehradun", "addressRegion": "Uttarakhand", "postalCode": "248001", "addressCountry": "IN"}},
+                 {"@type": "Place", "name": "Revotel Ghaziabad", "address": {"@type": "PostalAddress", "addressLocality": "Ghaziabad", "addressRegion": "Uttar Pradesh", "addressCountry": "IN"}},
+                 {"@type": "Place", "name": "Revotel Goa", "address": {"@type": "PostalAddress", "addressLocality": "Goa", "addressRegion": "Goa", "addressCountry": "IN"}}],
 }
 
 def nav_html(cur):
@@ -347,17 +400,18 @@ def nav_html(cur):
 def footer_html(cur):
     svc = "".join(f'<li><a href="{href(cur, spath(s))}">{e(s["name"])}</a></li>' for s in SERVICES)
     tch = "".join(f'<li><a href="{href(cur, tpath(t))}">{e(t["name"])}</a></li>' for t in TECH)
-    dst = "".join(f'<li><a href="{href(cur, "destinations/" + d["slug"])}">{e(d["name"])}</a></li>' for d in DESTS)
+    dst = "".join(f'<li><a href="{href(cur, "destinations/" + d["slug"])}">{e(d["name"])}</a></li>' for d in CORE_DESTS) + f'<li><a href="{href(cur, "destinations")}">All destinations</a></li>'
     return f'''<footer class="site-footer"><div class="foot-cols">
 <div class="stack" style="gap:.6rem"><a class="brand" href="{href(cur, "")}">{logo_img()}</a>
 <p class="muted" style="font-size:.95rem">Hotel revenue management and hotel technology, with consulting, content and launch support.</p>
-<p class="copyline">{PHONE1}<br>{EMAIL2}</p></div>
+<p class="copyline">{PHONE1}<br>{EMAIL2}</p>
+<p class="muted" style="font-size:.9rem">2nd Floor, 1 GMS Road, Towno, Ballupur, Dehradun 248001<br>Also in Ghaziabad and Goa</p></div>
 <div><h3>Services</h3><ul>{svc}</ul></div>
 <div><h3>Technology</h3><ul>{tch}</ul></div>
 <div><h3>Destinations</h3><ul>{dst}</ul></div>
 <div><h3>Company</h3><ul><li><a href="{href(cur, "results")}">Results</a></li><li><a href="{href(cur, "insights")}">Insights</a></li><li><a href="{href(cur, "about")}">About</a></li><li><a href="{href(cur, "contact")}">Contact</a></li>
 <li><a href="https://www.linkedin.com/in/revotel">LinkedIn</a></li><li><a href="https://www.facebook.com/revotel.in/">Facebook</a></li><li><a href="{href(cur, "privacy")}">Privacy</a></li></ul></div></div>
-<p class="fine">&copy; 2026 Revotel. Hotel consulting in India, Dubai and Thailand. Serving Goa, Pune, Bangalore, Kolkata, Rajasthan, Uttarakhand, Himachal Pradesh, Madhya Pradesh and Thailand.</p></footer>'''
+<p class="fine">&copy; 2026 Revotel. Hotel consulting from Dehradun, Ghaziabad and Goa. Serving Goa, Uttarakhand, Himachal Pradesh, Madhya Pradesh, Dubai and Thailand.</p></footer>'''
 
 def page(path, title, desc, body, schemas, og_type="website", noindex=False):
     canon = BASE + ("/" if path == "" else "/" + path + "/")
@@ -389,7 +443,7 @@ def page(path, title, desc, body, schemas, og_type="website", noindex=False):
 <body>
 <header class="site-header"><a class="brand" href="{href(path, "")}">{logo_img()}</a>{nav_html(path)}</header>
 <main class="wrap">
-{body}
+{label_tables(body)}
 </main>
 {footer_html(path)}
 {TAWK}
@@ -443,7 +497,7 @@ def build_home():
     others = [s_ for s_ in SERVICES if s_["slug"] != "revenue-management"]
     dest_rows = "".join(
         f'<div class="row"><div><h3><a href="{href(p, "destinations/" + d["slug"])}">{e(d["name"])}</a></h3></div>'
-        f'<div><p>{e(d["places"])}</p></div></div>' for d in DESTS)
+        f'<div><p>{e(d["places"])}</p></div></div>' for d in CORE_DESTS)
     svc_rows = "".join(
         f'<div class="row"><div><h3><a href="{href(p, spath(s))}">{e(s["name"])}</a></h3></div>'
         f'<div><p>{e(s["short"])}</p></div></div>' for s in others)
@@ -463,7 +517,7 @@ def build_home():
     body = f'''
 <section class="hero"><div class="stack">
 <h1>Sell every room at the right rate, on the right channel.</h1>
-<p class="lead">Revotel runs hotel revenue management for independent hotels and resorts, and builds the technology behind it: Foodle+, our AI hotel PMS and guest experience system. Based in Goa, working across Goa, Uttarakhand, Himachal, Madhya Pradesh, Dubai and Thailand.</p>
+<p class="lead">Revotel runs hotel revenue management for independent hotels and resorts, and builds the technology behind it: Foodle+, our AI hotel PMS and guest experience system. Offices in Dehradun, Ghaziabad and Goa, working across Goa, Uttarakhand, Himachal, Madhya Pradesh, Dubai and Thailand.</p>
 <div class="btn-row"><a class="btn primary" href="https://wa.me/{PHONE1_WA}">Talk to Ravneet on WhatsApp</a><a class="btn" href="{href(p, "revenue-management")}">How revenue management works</a></div>
 </div>{pace_calendar()}</section>
 {ota_strip}
@@ -510,6 +564,7 @@ def build_home():
 <div class="rows">{ins_rows}</div></div></section>
 
 <section class="section"><div class="split"><div class="stack"><h2>Common questions</h2></div>{faq_block(HOME_FAQS)}</div></section>
+{offices_html()}
 {cta_block(p, "Want more from every room?")}
 '''
     add("", "Hotel Revenue Management & AI Hotel PMS in India | Revotel",
@@ -551,17 +606,41 @@ def tech_page(t):
                         "description": t["desc"], "publisher": {"@id": BASE + "/#org"}, "url": BASE + "/" + p + "/"})
     add(p, t["title"], t["desc"], body, schemas)
 
+import importlib.util as _iu
+_spec = _iu.spec_from_file_location("seo_pages", os.path.join(HERE, "seo_pages.py"))
+_sp = _iu.module_from_spec(_spec); _spec.loader.exec_module(_sp)
+GUIDES = _sp.GUIDES
+
+def guide_page(g):
+    p = "technology/" + g["slug"]
+    crumbs = [("Home", ""), ("Technology", "technology"), (g.get("crumb", g["h1"][:40]), p)]
+    fix = lambda h: _re0.sub(r"\[\[([^\]]+)\]\]", lambda m: href(p, m.group(1)), h)
+    secs = "".join(f'<section class="section"><div class="split"><div class="stack"><h2>{e(h)}</h2></div><div class="stack prose">{fix(b)}</div></div></section>' for h, b in g["blocks"])
+    others = "".join(f'<li><a href="{href(p, "technology/" + o["slug"])}">{e(o["h1"])}</a></li>' for o in GUIDES if o["slug"] != g["slug"])
+    body = f'''<section class="hero single"><div class="stack">{crumbs_html(p, crumbs)}<h1>{e(g["h1"])}</h1><p class="lead">{e(g["intro"])}</p>
+<div class="btn-row"><a class="btn primary" href="https://wa.me/{PHONE1_WA}?text=I%20would%20like%20a%20Foodle%2B%20demo">Book a Foodle+ demo on WhatsApp</a><a class="btn" href="{href(p, "technology/foodle-plus")}">See Foodle+</a></div></div></section>
+{secs}
+<section class="section"><div class="split"><div class="stack"><h2>Questions</h2></div>{faq_block(g["faqs"])}</div></section>
+<section class="section"><div class="split"><div class="stack"><h2>More guides</h2></div><ul class="checks">{others}<li><a href="{href(p, "technology")}">All Revotel technology</a></li></ul></div></section>
+{cta_block(p, "Find the right PMS for your hotel")}'''
+    art = {"@context": "https://schema.org", "@type": "Article", "headline": g["h1"], "description": g["desc"], "datePublished": TODAY, "dateModified": TODAY,
+           "author": {"@type": "Person", "name": "Ravneet", "sameAs": "https://www.linkedin.com/in/revotel"}, "publisher": {"@id": BASE + "/#org"},
+           "mainEntityOfPage": BASE + "/" + p + "/"}
+    add(p, g["title"], g["desc"], body, [ORG, art, crumb_schema(crumbs), faq_schema(g["faqs"])], og_type="article")
+
 def hub_tech():
     p = "technology"
     crumbs = [("Home", ""), ("Technology", "technology")]
     rows = "".join(
         f'<div class="row"><div><h3><a href="{href(p, tpath(t))}">{e(t["name"])}</a></h3></div>'
         f'<div><p>{e(t["short"])}</p><a class="more" href="{href(p, tpath(t))}">Read more</a></div></div>' for t in TECH)
+    grows = "".join(f'<div class="row"><div><h3><a href="{href(p, "technology/" + g["slug"])}">{e(g["h1"])}</a></h3></div><div><p>{e(g["desc"])}</p></div></div>' for g in GUIDES)
     body = f'''<section class="hero single"><div class="stack">{crumbs_html(p, crumbs)}<h1>Hotel technology from Revotel</h1>
 <p class="lead">Foodle+ is our AI hotel PMS, guest experience system and POS. We pair it with channel managers we trust and a revenue team that sets the rates.</p></div></section>
-<section class="section"><div class="rows">{rows}</div></section>{cta_block(p, "See Foodle+ at your hotel")}'''
-    add(p, "Hotel Technology: AI PMS, Guest Experience & Channel Manager | Revotel",
-        "Hotel technology from Revotel: Foodle+ AI PMS, QR-based guest experience management system, and channel manager setup with STAAH and Aiosell.",
+<section class="section"><div class="rows">{rows}</div></section>
+<section class="section"><div class="split"><div class="stack"><h2>Hotel PMS guides</h2><p class="muted">Plain-language help for choosing a cloud PMS.</p></div><div class="rows">{grows}</div></div></section>{cta_block(p, "See Foodle+ at your hotel")}'''
+    add(p, "Cloud PMS & Guest Experience System (GEMS) for Hotels in India | Foodle+ by Revotel",
+        "Foodle+ by Revotel: a cloud hotel PMS, guest experience management system (GEMS) and POS built with AI. A PMS that works with STAAH and Aiosell. Guides to choosing the best PMS.",
         body, [ORG, crumb_schema(crumbs)])
 
 def hub_services():
@@ -580,22 +659,28 @@ def hub_services():
 
 def hub_dests():
     p = "destinations"
-    rows = "".join(
-        f'<div class="row"><div><h3><a href="{href(p, "destinations/" + d["slug"])}">{e(d["name"])}</a></h3></div>'
-        f'<div><p>{e(d["places"])}</p><a class="more" href="{href(p, "destinations/" + d["slug"])}">Hotel consulting in {e(d["name"])}</a></div></div>' for d in DESTS)
+    secs = ""
+    for g in DEST_GROUPS:
+        items = [d for d in DESTS if d.get("group") == g]
+        if not items:
+            continue
+        rows = "".join(
+            f'<div class="row"><div><h3><a href="{href(p, "destinations/" + d["slug"])}">{e(d["name"])}</a></h3></div>'
+            f'<div><p>{e(d["places"])}</p><a class="more" href="{href(p, "destinations/" + d["slug"])}">Hotel consulting in {e(d["name"])}</a></div></div>' for d in items)
+        secs += f'<section class="section"><div class="split"><div class="stack"><h2>{e(g)}</h2></div><div class="rows">{rows}</div></div></section>'
     crumbs = [("Home", ""), ("Destinations", "destinations")]
     body = f'''<section class="hero single"><div class="stack">{crumbs_html(p, crumbs)}<h1>Destinations we work in</h1>
-<p class="lead">We work on hotels across India's leisure, pilgrimage and business markets, and in Dubai and Thailand. Other markets by discussion.</p></div></section>
-<section class="section"><div class="rows">{rows}</div></section>{cta_block(p)}'''
-    add(p, "Hotel Consultant Across India, Dubai & Thailand | Revotel",
-        "Hotel consulting and revenue management in Goa, Uttarakhand, Himachal Pradesh, Madhya Pradesh, Dubai and Thailand.",
+<p class="lead">We work on hotels across India's hill, pilgrimage, heritage, beach and city markets, and in Dubai, Thailand, Bhutan, Sri Lanka and Nepal. Other markets by discussion.</p></div></section>
+{secs}{cta_block(p)}'''
+    add(p, "Hotel Consultant Across India, Dubai, Thailand, Bhutan, Sri Lanka & Nepal | Revotel",
+        "Hotel consulting and revenue management in Goa, Uttarakhand, Himachal, Rajasthan, Kerala, Delhi, Mumbai and more, plus Dubai, Thailand, Bhutan, Sri Lanka and Nepal.",
         body, [ORG, crumb_schema(crumbs)])
 
 def service_page(s):
     p = spath(s)
     crumbs = [("Home", ""), (s["name"], p)] if s["slug"] == "revenue-management" else [("Home", ""), ("Services", "services"), (s["name"], p)]
     does = "".join(f"<li>{e(x)}</li>" for x in s["does"])
-    dl = "".join(f'<li><a href="{href(p, "destinations/" + d["slug"])}">{e(d["name"])}</a></li>' for d in DESTS)
+    dl = "".join(f'<li><a href="{href(p, "destinations/" + d["slug"])}">{e(d["name"])}</a></li>' for d in CORE_DESTS) + f'<li><a href="{href(p, "destinations")}">All destinations</a></li>'
     others = "".join(f'<li><a href="{href(p, spath(o))}">{e(o["name"])}</a></li>' for o in SERVICES if o["slug"] != s["slug"]) + f'<li><a href="{href(p, tpath(TECH[0]))}">Foodle+ AI hotel PMS</a></li>'
     body = f'''<section class="hero single"><div class="stack">{crumbs_html(p, crumbs)}<h1>{e(s["h1"])}</h1><p class="lead">{e(s["intro"])}</p>
 <div class="btn-row"><a class="btn primary" href="https://wa.me/{PHONE1_WA}">Ask about this service</a><a class="btn" href="{href(p, "contact")}">Contact form</a></div></div></section>
@@ -616,7 +701,7 @@ def dest_page(d):
     rows = "".join(f"<tr><td>{e(a)}</td><td>{e(b)}</td><td>{e(c)}</td></tr>" for a, b, c in d["rows"])
     pains = "".join(f"<li>{e(x)}</li>" for x in d["pains"])
     svc = "".join(f'<li><a href="{href(p, spath(s))}">{e(s["name"])}</a></li>' for s in SERVICES)
-    others = "".join(f'<li><a href="{href(p, "destinations/" + o["slug"])}">{e(o["name"])}</a></li>' for o in DESTS if o["slug"] != d["slug"])
+    others = "".join(f'<li><a href="{href(p, "destinations/" + o["slug"])}">{e(o["name"])}</a></li>' for o in DESTS if o["slug"] != d["slug"] and o.get("group") == d.get("group")) + f'<li><a href="{href(p, "destinations")}">All destinations</a></li>'
     body = f'''<section class="hero single"><div class="stack">{crumbs_html(p, crumbs)}<h1>{e(d["h1"])}</h1><p class="lead">{e(d["intro"])}</p>
 <p class="muted">Markets covered: {e(d["places"])}</p>
 <div class="btn-row"><a class="btn primary" href="https://wa.me/{PHONE1_WA}">Discuss your {e(d["name"])} property</a><a class="btn" href="{href(p, "contact")}">Contact form</a></div></div></section>
@@ -640,7 +725,8 @@ def about_page():
 <li>Plain monthly reports you can read in ten minutes and check against your own books</li>
 <li>Work done through your systems, so you keep control of your accounts and data</li>
 <li>Honest advice, including when the answer is to change a room mix, a channel manager or a price you are attached to</li></ul></div></section>
-<section class="section"><div class="split"><div class="stack"><h2>Where we are based</h2></div><p>Our team works from Goa, Pune, Bangalore and Kolkata, and with properties in Rajasthan, Uttarakhand, Himachal Pradesh, Madhya Pradesh, Dubai and Thailand.</p></div></section>
+<section class="section"><div class="split"><div class="stack"><h2>Where we are based</h2></div><p>Our offices are in Dehradun, Ghaziabad and Goa. We work with properties in Goa, Uttarakhand, Himachal Pradesh, Madhya Pradesh, Dubai and Thailand.</p></div></section>
+{offices_html()}
 {cta_block(p)}'''
     add(p, "About Revotel | Hotel Consultants in India", "Revotel is a hotel consulting firm led by Ravneet, working with owners and general managers on hotel launches, revenue management and distribution.",
         body, [ORG, crumb_schema(crumbs)])
@@ -662,7 +748,8 @@ def contact_page():
 <option>New hotel launch</option><option>Revenue management</option><option>OTA and distribution</option><option>Reputation and reviews</option><option>Staff training</option><option>Not sure yet</option></select></label>
 <label for="f-msg">Message<textarea id="f-msg" name="message"></textarea></label>
 <div class="btn-row"><button class="btn primary" type="submit" id="send-wa">Send on WhatsApp</button><button class="btn" type="button" id="send-mail">Send by email</button></div>
-<p class="caption" id="form-note">This opens WhatsApp or your email app with your message filled in. Nothing is stored on this site.</p></form></div></section>'''
+<p class="caption" id="form-note">This opens WhatsApp or your email app with your message filled in. Nothing is stored on this site.</p></form></div></section>
+{offices_html()}'''
     script = f'''<script>
 (function(){{
   var f=document.getElementById("enquiry"); if(!f) return;
@@ -1002,6 +1089,7 @@ if(PW)login();
 # ---------- build ----------
 build_home(); hub_services(); hub_dests(); hub_tech()
 for t in TECH: tech_page(t)
+for g_ in GUIDES: guide_page(g_)
 for s in SERVICES: service_page(s)
 for d in DESTS: dest_page(d)
 results_page(); hub_insights()
