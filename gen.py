@@ -36,7 +36,7 @@ SERVICES = [
  dict(slug="revenue-management", name="Hotel revenue management",
   short="Daily rate, inventory and channel decisions for your property, run by a revenue manager who reads your market.",
   title="Hotel Revenue Management Services in India | Revotel",
-  desc="Outsourced hotel revenue management for independent hotels and resorts in Goa, Uttarakhand, Himachal, Madhya Pradesh, Dubai and Thailand. Rate strategy, forecasting and monthly performance reports.",
+  desc="Outsourced hotel revenue management for independent hotels and resorts in India, Dubai, Thailand, Bhutan, Sri Lanka and Nepal. Rate strategy, forecasting and monthly performance reports.",
   h1="Hotel revenue management for independent properties",
   intro="Most independent hotels price by habit: last year's rate, a nervous discount, a copy of the hotel across the road. We take over the daily decisions on rate, inventory, restrictions and channel mix, and report back every month in numbers you can check against your own books.",
   does=["Daily rate and availability decisions across your room types and rate plans",
@@ -223,6 +223,56 @@ import importlib.util as _iu2
 _ls = _iu2.spec_from_file_location("locations", os.path.join(HERE, "locations.py"))
 _lm = _iu2.module_from_spec(_ls); _ls.loader.exec_module(_lm)
 DESTS = CORE_DESTS + _lm.LOCATIONS
+
+# ---- Destination hub data: short market copy, peak season, main guests, parent state. Edit here. ----
+DEST_META = {
+ "uttarakhand": ("The Himalayan state with Dehradun, Rishikesh, Haridwar, Mussoorie and Nainital. Demand mixes pilgrimage, adventure, weddings and summer escapes from the plains.", "April to June, October to November", "Delhi NCR families, pilgrims, adventure travellers", ""),
+ "dehradun": ("A city market with business, wedding and gateway travel to Mussoorie and Rishikesh. Weekdays and weekends behave differently.", "Weekends, wedding season, summer", "Corporate, wedding and weekend guests", "uttarakhand"),
+ "rishikesh": ("Yoga, rafting and the Ganga draw wellness and adventure guests, with a strong retreat segment.", "September to November, February to April", "Wellness, adventure and international travellers", "uttarakhand"),
+ "haridwar": ("A pilgrimage town where demand spikes around festivals and bathing dates, and drops between them.", "Festival and bathing dates, Kanwar season", "Pilgrim groups and families", "uttarakhand"),
+ "himachal-pradesh": ("Snow in winter and a summer rush from the plains. Road conditions change what guests will book.", "December to January, April to June", "Delhi, Punjab and Chandigarh families, couples", ""),
+ "manali": ("Two peaks: snow season and the summer holidays. Monsoon months are slow.", "December to January, April to June", "Couples, families, adventure travellers", "himachal-pradesh"),
+ "dharamshala": ("McLeod Ganj and Bir bring leisure, spiritual, trekking and paragliding guests.", "March to June, October to November", "Leisure, spiritual and adventure guests", "himachal-pradesh"),
+ "shimla": ("A classic hill station with strong weekend and holiday demand from nearby cities.", "April to June, December to January", "Families and weekend travellers", "himachal-pradesh"),
+ "chandigarh": ("A planned city with steady corporate, medical and transit travel, and weekend leisure.", "Year round, with weekday corporate demand", "Corporate, medical and transit guests", ""),
+ "rajasthan": ("Heritage forts, palaces and desert camps. Demand follows the cool season and the wedding calendar.", "October to March", "Domestic leisure, international and wedding guests", ""),
+ "jaipur": ("The Pink City is a heritage, shopping and wedding market with strong weekend flow.", "October to March, wedding season", "Heritage, wedding and weekend guests", "rajasthan"),
+ "udaipur": ("Lakes and palaces make Udaipur a leading wedding and honeymoon destination.", "October to March", "Wedding, honeymoon and luxury guests", "rajasthan"),
+ "mount-abu": ("Rajasthan's only hill station, popular with Gujarat travellers in summer and on long weekends.", "April to June, monsoon weekends", "Families from Gujarat and Rajasthan", "rajasthan"),
+ "ahmedabad": ("A business and heritage city with year-round corporate demand and festival peaks.", "Year round, with festival peaks", "Corporate and visiting-family guests", ""),
+ "delhi": ("A large, competitive market with corporate, transit, medical and event demand.", "October to March", "Corporate, transit and medical guests", ""),
+ "varanasi": ("A pilgrimage and heritage city with demand around festivals and the cool season.", "October to March, festival dates", "Pilgrims, heritage and international travellers", ""),
+ "ayodhya": ("A fast-growing pilgrimage market where demand surges around festivals and special days.", "Festival dates and long weekends", "Pilgrim groups and families", ""),
+ "mumbai": ("A business and transit city with strong weekday corporate demand and weekend staycations.", "October to March", "Corporate, transit and staycation guests", ""),
+ "shirdi": ("A pilgrimage town with steady daily flow and spikes at festivals and long weekends.", "Thursdays, weekends, festival dates", "Pilgrim groups and families", ""),
+ "goa": ("A year-round leisure market with a strong winter peak, a monsoon dip and festival spikes.", "November to February", "Domestic leisure, groups, international guests", ""),
+ "madhya-pradesh": ("Heritage towns, wildlife reserves and pilgrimage circuits across the state.", "October to March", "Family, wildlife and pilgrim travellers", ""),
+ "kerala": ("Backwaters, hills and beaches with a long season and a monsoon wellness segment.", "October to March", "Domestic leisure, honeymoon and international guests", ""),
+ "dubai": ("A global city with a winter peak and a strong Indian traveller segment.", "November to March", "Indian, GCC and European travellers", ""),
+ "thailand": ("A clear high season, a green season and festival spikes, with a growing Indian segment.", "November to February", "Indian, regional and international travellers", ""),
+ "bhutan": ("A high-value, regulated market with spring and autumn peaks.", "March to May, September to November", "International and Indian travellers", ""),
+ "sri-lanka": ("Beaches, hills and culture, with two monsoon seasons that shift the best coast.", "December to March, July to September", "International and Indian travellers", ""),
+ "nepal": ("Trekking, pilgrimage and city stays around Kathmandu and Pokhara.", "March to May, October to November", "Trekkers, pilgrims and Indian travellers", ""),
+}
+# hub groups: heading, short intro, member slugs (first is the main page for the region)
+DEST_GROUPS2 = [
+ ("Uttarakhand", "Our home market. The state page covers the whole state; the city pages go deeper on each town.", ["uttarakhand", "dehradun", "rishikesh", "haridwar"]),
+ ("Himachal Pradesh and Chandigarh", "Hill-station demand with snow and summer peaks, plus Chandigarh as a city and transit market.", ["himachal-pradesh", "manali", "dharamshala", "shimla", "chandigarh"]),
+ ("Rajasthan and Gujarat", "Heritage, wedding and cool-season demand across Rajasthan, with Ahmedabad as a business city.", ["rajasthan", "jaipur", "udaipur", "mount-abu", "ahmedabad"]),
+ ("Delhi and Uttar Pradesh", "A large city market and the pilgrimage cities of Varanasi and Ayodhya.", ["delhi", "varanasi", "ayodhya"]),
+ ("Goa, Maharashtra and Madhya Pradesh", "Beach, city and pilgrimage markets in the west and centre of India.", ["goa", "mumbai", "shirdi", "madhya-pradesh"]),
+ ("South India", "Kerala's backwaters, hills and beaches.", ["kerala"]),
+ ("Outside India", "Dubai, Thailand, Bhutan, Sri Lanka and Nepal, including Indian owners with properties abroad.", ["dubai", "thailand", "bhutan", "sri-lanka", "nepal"]),
+]
+_BY_SLUG = {d["slug"]: d for d in DESTS}
+for _d in DESTS:
+    _m = DEST_META[_d["slug"]]
+    _d["blurb"], _d["peak"], _d["guests"], _d["parent"] = _m
+    _d["group"] = ""
+for _g, _i, _sl in DEST_GROUPS2:
+    for _s in _sl:
+        _BY_SLUG[_s]["group"] = _g
+assert all(d["group"] for d in DESTS), [d["slug"] for d in DESTS if not d["group"]]
 ALL_DEST_NAMES = [d["name"] for d in DESTS]
 OTAS = ["MakeMyTrip", "Goibibo", "Booking.com", "Agoda", "Expedia", "Yatra", "Cleartrip", "Trip.com", "Airbnb", "Tripadvisor"]
 OTA_LOGOS = [("gommt", "Go-MMT Group: MakeMyTrip, Goibibo, redBus", "#ffffff"), ("booking", "Booking.com", "#ffffff"), ("agoda", "Agoda", "#ffffff"),
@@ -245,7 +295,7 @@ HOME_FAQS = [
  ("What is hotel revenue management?","It is the practice of selling the right room to the right guest at the right time, at the right price, through the right channel. Revotel runs it for independent hotels and resorts: daily rates and inventory, channel mix, forecasting and a monthly report."),
  ("What is Foodle+?","Foodle+ is Revotel's hotel PMS, guest experience management system (GEMS) and POS, built with AI and powered by automation. Guests scan a QR code to make requests, which are routed to the PMS, or to WhatsApp if your hotel is connected through Meta. It syncs with STAAH and Aiosell."),
  ("Which channel managers do you work with?","STAAH and Aiosell. Foodle+ is compatible with both, and our revenue team can manage rates and inventory through either."),
- ("Who do you work with?","Independent hotels, resorts, boutique stays, villas and serviced apartments, and owners who are still building. We work in Goa, Uttarakhand, Himachal Pradesh, Madhya Pradesh, Dubai and Thailand, and take on other markets by discussion."),
+ ("Who do you work with?","Independent hotels, resorts, boutique stays, villas and serviced apartments, and owners who are still building. We work across India, Dubai, Thailand, Bhutan, Sri Lanka and Nepal, and take on other markets by discussion."),
  ("Can I use revenue management and Foodle+ separately?","Yes. Each works on its own. Used together, the revenue team works from your own PMS data."),
  ("How do I start?","Send a message on WhatsApp or the contact page with your property name, location and what you need. We reply with questions and a proposal after a short call."),
 ]
@@ -298,6 +348,10 @@ TECH = [
         ("Do I need Foodle+ to use your channel manager service?","No. Revenue management and channel manager work can be done with or without Foodle+.")]),
 ]
 CHANNEL_MANAGERS = ["STAAH", "Aiosell"]
+LINKEDIN = "https://www.linkedin.com/in/ravneetbhalla/"
+ADDR_FULL = "Towno/Foodle Plus, 2nd Floor 1, GMS Rd, above Khopche Restaurant, Nehru Enclave, Satya Vihar, Ballupur, Dehradun, Uttarakhand 248001"
+ADDR_STREET = "Towno/Foodle Plus, 2nd Floor 1, GMS Rd, above Khopche Restaurant, Nehru Enclave, Satya Vihar, Ballupur"
+OG_IMG = "https://www.revotel.in/images/og-default.png"
 FOODLE = "https://foodleplus.com"
 
 def spath(s):
@@ -341,8 +395,8 @@ def crumb_schema(items):
             "itemListElement": [{"@type": "ListItem", "position": i + 1, "name": n, "item": BASE + ("/" if p == "" else "/" + p + "/")} for i, (n, p) in enumerate(items)]}
 
 OFFICES = [
-    dict(city="Dehradun", region="Uttarakhand", lines=["2nd Floor, 1 GMS Road, Towno", "Ballupur, Dehradun 248001"],
-         maps="https://www.google.com/maps/search/?api=1&query=" + "2nd+Floor%2C+1+GMS+Road%2C+Ballupur%2C+Dehradun+248001"),
+    dict(city="Dehradun", region="Uttarakhand", lines=["Towno/Foodle Plus, 2nd Floor 1, GMS Rd", "Above Khopche Restaurant, Nehru Enclave", "Satya Vihar, Ballupur, Dehradun, Uttarakhand 248001"],
+         maps="https://www.google.com/maps/search/?api=1&query=" + "Towno+Foodle+Plus+GMS+Rd+Ballupur+Dehradun+248001"),
     dict(city="Ghaziabad", region="Uttar Pradesh", lines=[], maps=""),
     dict(city="Goa", region="Goa", lines=[], maps=""),
 ]
@@ -353,7 +407,7 @@ def offices_html(heading="Our offices", cls="offices"):
         addr = "".join(f"<span>{e(l)}</span>" for l in o["lines"]) or (f'<span class="muted">{e(o["region"])}</span>' if o["region"] != o["city"] else '<span class="muted">Address on request</span>')
         link = f'<a class="more" href="{o["maps"]}" rel="noopener" target="_blank">Open in Maps</a>' if o["maps"] else ""
         cards += f'<li><h3>{e(o["city"])}</h3><address>{addr}</address>{link}</li>'
-    return f'<section class="section"><div class="split"><div class="stack"><h2>{e(heading)}</h2><p class="muted">Revotel works from Dehradun, Ghaziabad and Goa, and travels to properties across India, Dubai and Thailand.</p></div><ul class="{cls}">{cards}</ul></div></section>'
+    return f'<section class="section"><div class="split"><div class="stack"><h2>{e(heading)}</h2><p class="muted">Revotel works from Dehradun, Ghaziabad and Goa, and travels to properties across India, Dubai, Thailand, Bhutan, Sri Lanka and Nepal.</p></div><ul class="{cls}">{cards}</ul></div></section>'
 
 import re as _re0
 def label_tables(h):
@@ -378,16 +432,27 @@ ORG = {
     "name": "Revotel", "url": BASE + "/",
     "description": "Hotel revenue management and hotel technology company. Builds the Foodle+ AI PMS and guest experience system; also provides hotel consulting, planning and development, OTA distribution, content and photoshoots.",
     "email": EMAIL2, "telephone": PHONE1_TEL,
-    "areaServed": [{"@type": "AdministrativeArea", "name": "Goa"}, {"@type": "AdministrativeArea", "name": "Uttarakhand"},
-                   {"@type": "AdministrativeArea", "name": "Himachal Pradesh"}, {"@type": "AdministrativeArea", "name": "Madhya Pradesh"},
-                   {"@type": "City", "name": "Dubai"}, {"@type": "Country", "name": "Thailand"}],
+    "areaServed": [{"@type": "Country", "name": "India"}, {"@type": "Country", "name": "United Arab Emirates"}, {"@type": "Country", "name": "Thailand"},
+                   {"@type": "Country", "name": "Bhutan"}, {"@type": "Country", "name": "Sri Lanka"}, {"@type": "Country", "name": "Nepal"}],
     "serviceType": ["Hotel revenue management", "Hotel PMS software", "Guest experience management system", "Channel manager setup", "Hotel consulting", "Hotel planning and development", "OTA management", "Hotel photography and content writing", "Hotel reputation management", "Hotel staff training"],
-    "sameAs": ["https://www.facebook.com/revotel.in/", "https://www.linkedin.com/in/revotel"],
-    "address": {"@type": "PostalAddress", "streetAddress": "2nd Floor, 1 GMS Road, Towno, Ballupur", "addressLocality": "Dehradun", "addressRegion": "Uttarakhand", "postalCode": "248001", "addressCountry": "IN"},
-    "location": [{"@type": "Place", "name": "Revotel Dehradun", "address": {"@type": "PostalAddress", "streetAddress": "2nd Floor, 1 GMS Road, Towno, Ballupur", "addressLocality": "Dehradun", "addressRegion": "Uttarakhand", "postalCode": "248001", "addressCountry": "IN"}},
+    "sameAs": ["https://www.facebook.com/revotel.in/", LINKEDIN],
+    "address": {"@type": "PostalAddress", "streetAddress": ADDR_STREET, "addressLocality": "Dehradun", "addressRegion": "Uttarakhand", "postalCode": "248001", "addressCountry": "IN"},
+    "location": [{"@type": "Place", "name": "Revotel Dehradun", "address": {"@type": "PostalAddress", "streetAddress": ADDR_STREET, "addressLocality": "Dehradun", "addressRegion": "Uttarakhand", "postalCode": "248001", "addressCountry": "IN"}},
                  {"@type": "Place", "name": "Revotel Ghaziabad", "address": {"@type": "PostalAddress", "addressLocality": "Ghaziabad", "addressRegion": "Uttar Pradesh", "addressCountry": "IN"}},
                  {"@type": "Place", "name": "Revotel Goa", "address": {"@type": "PostalAddress", "addressLocality": "Goa", "addressRegion": "Goa", "addressCountry": "IN"}}],
 }
+
+LOCAL = {"@context": "https://schema.org", "@type": ["LocalBusiness", "ProfessionalService"], "@id": BASE + "/#dehradun",
+    "name": "Revotel Dehradun (Towno / Foodle Plus)", "url": BASE + "/", "image": OG_IMG, "logo": BASE + "/images/logo.png",
+    "telephone": PHONE1_TEL, "email": EMAIL2, "parentOrganization": {"@id": BASE + "/#org"},
+    "address": {"@type": "PostalAddress", "streetAddress": ADDR_STREET, "addressLocality": "Dehradun", "addressRegion": "Uttarakhand", "postalCode": "248001", "addressCountry": "IN"},
+    "hasMap": "https://www.google.com/maps/search/?api=1&query=Towno+Foodle+Plus+GMS+Rd+Ballupur+Dehradun+248001",
+    "areaServed": [{"@type": "Country", "name": "India"}, {"@type": "Country", "name": "United Arab Emirates"}, {"@type": "Country", "name": "Thailand"}],
+    "sameAs": [LINKEDIN], "priceRange": "Custom"}
+PERSON = {"@context": "https://schema.org", "@type": "Person", "@id": BASE + "/about/#ravneet", "name": "Ravneet Bhalla",
+    "jobTitle": "Head, Towno / Foodle+ / Revotel", "image": BASE + "/images/ravneet.jpg", "url": BASE + "/about/", "sameAs": [LINKEDIN],
+    "worksFor": [{"@type": "Organization", "name": "Intellego Tech Solutions"}, {"@id": BASE + "/#org"}],
+    "knowsAbout": ["Hotel revenue management", "Hotel PMS", "Online travel agencies", "Hotel distribution"]}
 
 def nav_html(cur):
     def a(t, p, key):
@@ -405,15 +470,15 @@ def footer_html(cur):
 <div class="stack" style="gap:.6rem"><a class="brand" href="{href(cur, "")}">{logo_img()}</a>
 <p class="muted" style="font-size:.95rem">Hotel revenue management and hotel technology, with consulting, content and launch support.</p>
 <p class="copyline">{PHONE1}<br>{EMAIL2}</p>
-<p class="muted" style="font-size:.9rem">2nd Floor, 1 GMS Road, Towno, Ballupur, Dehradun 248001<br>Also in Ghaziabad and Goa</p></div>
+<p class="muted" style="font-size:.9rem">{ADDR_FULL}<br>Also in Ghaziabad and Goa</p></div>
 <div><h3>Services</h3><ul>{svc}</ul></div>
 <div><h3>Technology</h3><ul>{tch}</ul></div>
 <div><h3>Destinations</h3><ul>{dst}</ul></div>
 <div><h3>Company</h3><ul><li><a href="{href(cur, "results")}">Results</a></li><li><a href="{href(cur, "insights")}">Insights</a></li><li><a href="{href(cur, "about")}">About</a></li><li><a href="{href(cur, "contact")}">Contact</a></li>
-<li><a href="https://www.linkedin.com/in/revotel">LinkedIn</a></li><li><a href="https://www.facebook.com/revotel.in/">Facebook</a></li><li><a href="{href(cur, "privacy")}">Privacy</a></li></ul></div></div>
-<p class="fine">&copy; 2026 Revotel. Hotel consulting from Dehradun, Ghaziabad and Goa. Serving Goa, Uttarakhand, Himachal Pradesh, Madhya Pradesh, Dubai and Thailand.</p></footer>'''
+<li><a href=LINKEDIN>LinkedIn</a></li><li><a href="https://www.facebook.com/revotel.in/">Facebook</a></li><li><a href="{href(cur, "privacy")}">Privacy</a></li></ul></div></div>
+<p class="fine">&copy; 2026 Revotel. Hotel consulting from Dehradun, Ghaziabad and Goa. Serving India, Dubai, Thailand, Bhutan, Sri Lanka and Nepal.</p></footer>'''
 
-def page(path, title, desc, body, schemas, og_type="website", noindex=False):
+def page(path, title, desc, body, schemas, og_type="website", noindex=False, image=None):
     canon = BASE + ("/" if path == "" else "/" + path + "/")
     css = f"<style>{CSS}</style>" if PREVIEW else f'<link rel="stylesheet" href="/css/style.css">'
     ld = "".join(f'<script type="application/ld+json">{json.dumps(s, ensure_ascii=False)}</script>' for s in schemas)
@@ -432,7 +497,15 @@ def page(path, title, desc, body, schemas, og_type="website", noindex=False):
 <meta property="og:title" content="{e(title)}">
 <meta property="og:description" content="{e(desc)}">
 <meta property="og:url" content="{canon}">
-<meta name="twitter:card" content="summary">
+<meta property="og:image" content="{image or OG_IMG}">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Revotel: hotel revenue management and Foodle+ AI hotel PMS">
+<meta property="og:locale" content="en_IN">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="{e(title)}">
+<meta name="twitter:description" content="{e(desc)}">
+<meta name="twitter:image" content="{image or OG_IMG}">
 <meta name="theme-color" content="#00c4cc">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -481,7 +554,34 @@ def pace_calendar():
 
 PAGES = []  # (path, html)
 
+TITLE_FIX = {
+    "technology/hotel-pms": "AI Hotel PMS Software in India | Cloud PMS | Foodle+",
+    "technology/foodle-plus": "Foodle+ Cloud PMS & Guest Experience System | Revotel",
+    "technology/best-pms-in-india": "Best PMS in India 2026: AI & Automation | Revotel",
+    "technology/pms-compatible-with-staah": "PMS Compatible with STAAH and Aiosell | Foodle+",
+    "technology/best-cloud-pms-for-hotels": "Best Cloud PMS for Hotels & Resorts (2026) | Revotel",
+    "technology/guest-experience-system": "Guest Experience System (GEMS) for Hotels | Revotel",
+    "technology/hotel-pms-software-list": "Hotel PMS Software List 2026: Hotelogix, Cloudbeds | Revotel",
+    "services/training": "Hotel Staff Training: Sales & Front Office | Revotel",
+    "services/content-photography": "Hotel Photoshoot & Content Writing in India | Revotel",
+}
+def fit_title(path, t):
+    t = TITLE_FIX.get(path, t)
+    if len(t) > 60 and t.endswith(" | Revotel"):
+        t = t[:-len(" | Revotel")]
+    return t
+def fit_desc(d, n=155):
+    if len(d) <= n:
+        return d
+    cut = d[:n]
+    i = cut.rfind(". ")
+    if i >= 80:
+        return cut[:i + 1]
+    j = max(cut.rfind(", "), cut.rfind(": "), cut.rfind("; "))
+    return (cut[:j] if j >= 80 else cut[:cut.rfind(" ")].rstrip(",;:")) + "."
+
 def add(path, title, desc, body, schemas, **kw):
+    title, desc = fit_title(path, title), fit_desc(desc)
     PAGES.append((path, page(path, title, desc, body, schemas, **kw)))
 
 # ---------- home ----------
@@ -517,7 +617,7 @@ def build_home():
     body = f'''
 <section class="hero"><div class="stack">
 <h1>Sell every room at the right rate, on the right channel.</h1>
-<p class="lead">Revotel runs hotel revenue management for independent hotels and resorts, and builds the technology behind it: Foodle+, our AI hotel PMS and guest experience system. Offices in Dehradun, Ghaziabad and Goa, working across Goa, Uttarakhand, Himachal, Madhya Pradesh, Dubai and Thailand.</p>
+<p class="lead">Revotel runs hotel revenue management for independent hotels and resorts, and builds the technology behind it: Foodle+, our AI hotel PMS and guest experience system. Offices in Dehradun, Ghaziabad and Goa, working across India, Dubai, Thailand, Bhutan, Sri Lanka and Nepal.</p>
 <div class="btn-row"><a class="btn primary" href="https://wa.me/{PHONE1_WA}">Talk to Ravneet on WhatsApp</a><a class="btn" href="{href(p, "revenue-management")}">How revenue management works</a></div>
 </div>{pace_calendar()}</section>
 {ota_strip}
@@ -568,8 +668,8 @@ def build_home():
 {cta_block(p, "Want more from every room?")}
 '''
     add("", "Hotel Revenue Management & AI Hotel PMS in India | Revotel",
-        "Revotel: hotel revenue management for independent hotels and resorts, plus Foodle+, our AI hotel PMS and guest experience system. Goa, Uttarakhand, Himachal, Madhya Pradesh, Dubai, Thailand.",
-        body, [ORG, faq_schema(HOME_FAQS)])
+        "Revotel: hotel revenue management for independent hotels and resorts, plus Foodle+, our AI hotel PMS and guest experience system. India, Dubai, Thailand, Bhutan, Sri Lanka and Nepal.",
+        body, [ORG, LOCAL, faq_schema(HOME_FAQS)])
 
 def tech_page(t):
     p = tpath(t)
@@ -624,7 +724,7 @@ def guide_page(g):
 <section class="section"><div class="split"><div class="stack"><h2>More guides</h2></div><ul class="checks">{others}<li><a href="{href(p, "technology")}">All Revotel technology</a></li></ul></div></section>
 {cta_block(p, "Find the right PMS for your hotel")}'''
     art = {"@context": "https://schema.org", "@type": "Article", "headline": g["h1"], "description": g["desc"], "datePublished": TODAY, "dateModified": TODAY,
-           "author": {"@type": "Person", "name": "Ravneet", "sameAs": "https://www.linkedin.com/in/revotel"}, "publisher": {"@id": BASE + "/#org"},
+           "author": {"@id": BASE + "/about/#ravneet"}, "publisher": {"@id": BASE + "/#org"},
            "mainEntityOfPage": BASE + "/" + p + "/"}
     add(p, g["title"], g["desc"], body, [ORG, art, crumb_schema(crumbs), faq_schema(g["faqs"])], og_type="article")
 
@@ -633,47 +733,50 @@ def hub_tech():
     crumbs = [("Home", ""), ("Technology", "technology")]
     rows = "".join(
         f'<div class="row"><div><h3><a href="{href(p, tpath(t))}">{e(t["name"])}</a></h3></div>'
-        f'<div><p>{e(t["short"])}</p><a class="more" href="{href(p, tpath(t))}">Read more</a></div></div>' for t in TECH)
+        f'<div><p>{e(t["short"])}</p><a class="more" href="{href(p, tpath(t))}">Explore {e(t["name"])}</a></div></div>' for t in TECH)
     grows = "".join(f'<div class="row"><div><h3><a href="{href(p, "technology/" + g["slug"])}">{e(g["h1"])}</a></h3></div><div><p>{e(g["desc"])}</p></div></div>' for g in GUIDES)
-    body = f'''<section class="hero single"><div class="stack">{crumbs_html(p, crumbs)}<h1>Hotel technology from Revotel</h1>
+    body = f'''<section class="hero single"><div class="stack">{crumbs_html(p, crumbs)}<h1>Foodle+ cloud PMS and hotel technology</h1>
 <p class="lead">Foodle+ is our AI hotel PMS, guest experience system and POS. We pair it with channel managers we trust and a revenue team that sets the rates.</p></div></section>
 <section class="section"><div class="rows">{rows}</div></section>
 <section class="section"><div class="split"><div class="stack"><h2>Hotel PMS guides</h2><p class="muted">Plain-language help for choosing a cloud PMS.</p></div><div class="rows">{grows}</div></div></section>{cta_block(p, "See Foodle+ at your hotel")}'''
-    add(p, "Cloud PMS & Guest Experience System (GEMS) for Hotels in India | Foodle+ by Revotel",
-        "Foodle+ by Revotel: a cloud hotel PMS, guest experience management system (GEMS) and POS built with AI. A PMS that works with STAAH and Aiosell. Guides to choosing the best PMS.",
+    add(p, "Foodle+ Cloud PMS & GEMS for Hotels in India | Revotel",
+        "Foodle+ is a cloud hotel PMS, guest experience system (GEMS) and POS built with AI, working with STAAH and Aiosell. Plus plain guides to choosing a PMS.",
         body, [ORG, crumb_schema(crumbs)])
 
 def hub_services():
     p = "services"
     rows = "".join(
         f'<div class="row"><div><h3><a href="{href(p, spath(s))}">{e(s["name"])}</a></h3></div>'
-        f'<div><p>{e(s["short"])}</p><a class="more" href="{href(p, spath(s))}">Read more</a></div></div>' for s in SERVICES)
+        f'<div><p>{e(s["short"])}</p><a class="more" href="{href(p, spath(s))}">See what {e(s["name"])} includes</a></div></div>' for s in SERVICES)
     crumbs = [("Home", ""), ("Services", "services")]
     body = f'''<section class="hero single"><div class="stack">{crumbs_html(p, crumbs)}<h1>Hotel services</h1>
 <p class="lead">Revenue management and technology lead what we do. These services support them, from the first plan for a new hotel to the photos on your listings.</p></div></section>
 <section class="section"><div class="rows">{rows}</div>
 </section>{cta_block(p)}'''
-    add(p, "Hotel Consulting, Content & Distribution Services | Revotel",
+    add(p, "Hotel Consulting, Content & OTA Services | Revotel",
         "Hotel services from Revotel: revenue management, planning and development, OTA and marketing, content and photoshoots, reputation management and staff training.",
         body, [ORG, crumb_schema(crumbs)])
 
 def hub_dests():
     p = "destinations"
     secs = ""
-    for g in DEST_GROUPS:
-        items = [d for d in DESTS if d.get("group") == g]
-        if not items:
-            continue
-        rows = "".join(
-            f'<div class="row"><div><h3><a href="{href(p, "destinations/" + d["slug"])}">{e(d["name"])}</a></h3></div>'
-            f'<div><p>{e(d["places"])}</p><a class="more" href="{href(p, "destinations/" + d["slug"])}">Hotel consulting in {e(d["name"])}</a></div></div>' for d in items)
-        secs += f'<section class="section"><div class="split"><div class="stack"><h2>{e(g)}</h2></div><div class="rows">{rows}</div></div></section>'
+    for g, gintro, slugs in DEST_GROUPS2:
+        rows = ""
+        for sl in slugs:
+            d = _BY_SLUG[sl]
+            tag = f'<span class="muted">Part of {e(_BY_SLUG[d["parent"]]["name"])}</span> ' if d["parent"] else ""
+            link_txt = ("Revenue management across " + d["name"]) if not d["parent"] else ("Revenue management for " + d["name"] + " hotels, resorts and B&Bs")
+            rows += (f'<div class="row"><div><h3><a href="{href(p, "destinations/" + d["slug"])}">{e(d["name"])}</a></h3></div>'
+                     f'<div><p>{e(d["blurb"])}</p><p class="muted" style="font-size:.92rem">{tag}Peak: {e(d["peak"])}. Main guests: {e(d["guests"])}.</p>'
+                     f'<a class="more" href="{href(p, "destinations/" + d["slug"])}">{e(link_txt)}</a></div></div>')
+        secs += f'<section class="section"><div class="split"><div class="stack"><h2>{e(g)}</h2><p class="muted">{e(gintro)}</p></div><div class="rows">{rows}</div></div></section>'
     crumbs = [("Home", ""), ("Destinations", "destinations")]
-    body = f'''<section class="hero single"><div class="stack">{crumbs_html(p, crumbs)}<h1>Destinations we work in</h1>
-<p class="lead">We work on hotels across India's hill, pilgrimage, heritage, beach and city markets, and in Dubai, Thailand, Bhutan, Sri Lanka and Nepal. Other markets by discussion.</p></div></section>
+    body = f'''<section class="hero single"><div class="stack">{crumbs_html(p, crumbs)}<h1>Hotel consultant and revenue management by destination</h1>
+<p class="lead">Revotel works with independent hotels, resorts, B&amp;Bs, homestays and villas across India, Dubai, Thailand, Bhutan, Sri Lanka and Nepal. Every market has its own peak season and guest mix, so each page below sets out how demand moves there and what we do about it.</p>
+<p class="muted">State pages cover the whole state. City pages go deeper on one town and link back to their state. Other markets by discussion.</p></div></section>
 {secs}{cta_block(p)}'''
-    add(p, "Hotel Consultant Across India, Dubai, Thailand, Bhutan, Sri Lanka & Nepal | Revotel",
-        "Hotel consulting and revenue management in Goa, Uttarakhand, Himachal, Rajasthan, Kerala, Delhi, Mumbai and more, plus Dubai, Thailand, Bhutan, Sri Lanka and Nepal.",
+    add(p, "Hotel Consultant by Destination: India, Dubai, Thailand | Revotel",
+        "Revenue management for hotels, resorts and B&Bs in Uttarakhand, Himachal, Rajasthan, Goa, Kerala, Delhi, Dubai, Thailand, Bhutan, Sri Lanka and Nepal.",
         body, [ORG, crumb_schema(crumbs)])
 
 def service_page(s):
@@ -701,35 +804,55 @@ def dest_page(d):
     rows = "".join(f"<tr><td>{e(a)}</td><td>{e(b)}</td><td>{e(c)}</td></tr>" for a, b, c in d["rows"])
     pains = "".join(f"<li>{e(x)}</li>" for x in d["pains"])
     svc = "".join(f'<li><a href="{href(p, spath(s))}">{e(s["name"])}</a></li>' for s in SERVICES)
-    others = "".join(f'<li><a href="{href(p, "destinations/" + o["slug"])}">{e(o["name"])}</a></li>' for o in DESTS if o["slug"] != d["slug"] and o.get("group") == d.get("group")) + f'<li><a href="{href(p, "destinations")}">All destinations</a></li>'
+    others = "".join(f'<li><a href="{href(p, "destinations/" + o["slug"])}">{e(o["name"])} hotel consulting</a></li>' for o in DESTS if o["slug"] != d["slug"] and o.get("group") == d.get("group") and o["slug"] != d["parent"] and o["parent"] == d["parent"]) + f'<li><a href="{href(p, "destinations")}">All destinations we cover</a></li>'
+    kids = [o for o in DESTS if o["parent"] == d["slug"]]
+    par = _BY_SLUG.get(d["parent"]) if d["parent"] else None
+    if par:
+        crumbs = [("Home", ""), ("Destinations", "destinations"), (par["name"], "destinations/" + par["slug"]), (d["name"], p)]
+        rel = f'<p class="muted">This page is about {e(d["name"])} specifically. For the wider state market, see <a href="{href(p, "destinations/" + par["slug"])}">hotel revenue management in {e(par["name"])}</a>.</p>'
+    else:
+        rel = ""
+    kids_sec = ""
+    if kids:
+        kl = "".join(f'<li><a href="{href(p, "destinations/" + k["slug"])}">Hotel revenue management in {e(k["name"])}</a></li>' for k in kids)
+        kids_sec = f'<section class="section"><div class="split"><div class="stack"><h2>Cities and towns in {e(d["name"])}</h2><p class="muted">This page covers {e(d["name"])} as a whole. Each town below has its own page.</p></div><ul class="checks">{kl}</ul></div></section>'
     body = f'''<section class="hero single"><div class="stack">{crumbs_html(p, crumbs)}<h1>{e(d["h1"])}</h1><p class="lead">{e(d["intro"])}</p>
-<p class="muted">Markets covered: {e(d["places"])}</p>
+<p class="muted">We work with hotels, resorts, B&amp;Bs, homestays and villas in {e(d["places"])}.</p>{rel if par else ""}
 <div class="btn-row"><a class="btn primary" href="https://wa.me/{PHONE1_WA}">Discuss your {e(d["name"])} property</a><a class="btn" href="{href(p, "contact")}">Contact form</a></div></div></section>
 <section class="section"><div class="split"><div class="stack"><h2>How demand moves in {e(d["name"])}</h2><p class="muted">General patterns. Exact dates change each year, so we plan from the live calendar.</p></div>
 <div class="table-scroll"><table><thead><tr><th>Period</th><th>Demand pattern</th><th>What we do</th></tr></thead><tbody>{rows}</tbody></table></div></div></section>
-<section class="section"><div class="split"><div class="stack"><h2>Where hotels struggle here</h2></div><ul class="checks">{pains}</ul></div></section>
+{kids_sec}<section class="section"><div class="split"><div class="stack"><h2>Where hotels struggle here</h2></div><ul class="checks">{pains}</ul></div></section>
 <section class="section"><div class="split"><div class="stack"><h2>Services for {e(d["name"])} hotels</h2></div><ul class="checks">{svc}<li><a href="{href(p, tpath(TECH[0]))}">Foodle+ AI hotel PMS and guest experience system</a></li></ul></div></section>
 <section class="section"><div class="split"><div class="stack"><h2>Questions</h2></div>{faq_block(d["faqs"])}</div></section>
 <section class="section"><div class="split"><div class="stack"><h2>Other destinations</h2></div><ul class="chips">{others}</ul></div></section>
 {cta_block(p, "Hotel in " + d["name"] + "? Let's talk.")}'''
-    add(p, d["title"], d["desc"], body, [ORG, crumb_schema(crumbs), faq_schema(d["faqs"])])
+    add(p, d["title"], "Revenue management, OTA and launch support for hotels, resorts and B&Bs in %s. Peak season: %s." % (d["name"], d["peak"]), body, [ORG] + ([LOCAL] if d["slug"] in ("dehradun", "uttarakhand") else []) + [crumb_schema(crumbs), faq_schema(d["faqs"])])
 
 def about_page():
     p = "about"
     crumbs = [("Home", ""), ("About", "about")]
-    body = f'''<section class="hero single"><div class="stack">{crumbs_html(p, crumbs)}<h1>A hotel consultant who works next to the owner</h1>
-<p class="lead">Revotel is led by Ravneet. We work closely with owners and general managers, because the best results come from knowing the property, the market and the people running it.</p></div></section>
+    photo = ("data:image/jpeg;base64," + base64.b64encode(open(os.path.join(HERE, "images", "ravneet.jpg"), "rb").read()).decode()) if PREVIEW else "/images/ravneet.jpg"
+    body = f'''<section class="hero single"><div class="stack">{crumbs_html(p, crumbs)}<h1>Ravneet Bhalla: hotel revenue consultant and head of Revotel</h1>
+<p class="lead">Revotel is led by Ravneet Bhalla. We work closely with owners and general managers, because the best results come from knowing the property, the market and the people running it.</p></div></section>
+<section class="section"><div class="split"><div class="stack"><img src="{photo}" alt="Ravneet Bhalla, head of Revotel, Foodle+ and Towno" width="240" height="240" style="width:240px;height:240px;border-radius:24px;object-fit:cover" loading="lazy">
+<p><a class="btn" href="{LINKEDIN}" rel="me noopener" target="_blank">Ravneet on LinkedIn</a></p></div>
+<div class="prose"><h2>About Ravneet</h2>
+<p>Ravneet Bhalla is formerly with MakeMyTrip in Goa and has more than a decade of experience in hospitality. He heads Towno, Foodle+ and Revotel, which currently operate under the Intellego Tech Solutions brand.</p>
+<p>He trained as a doctor and physical therapist and practised in Bangalore before moving into hotels. He holds an MBA in Marketing and Sales and was top of his batch (2012 to 2014).</p>
+<p>That mix of OTA experience, hotel operations and technology is why Revotel pairs revenue management with its own PMS, Foodle+.</p></div></div></section>
 <section class="section"><div class="split"><div class="stack"><h2>How we work</h2></div><ul class="checks">
 <li>One point of contact who knows your property, not a rotating account team</li>
 <li>Decisions backed by data from your market and your competitor set</li>
 <li>Plain monthly reports you can read in ten minutes and check against your own books</li>
 <li>Work done through your systems, so you keep control of your accounts and data</li>
-<li>Honest advice, including when the answer is to change a room mix, a channel manager or a price you are attached to</li></ul></div></section>
-<section class="section"><div class="split"><div class="stack"><h2>Where we are based</h2></div><p>Our offices are in Dehradun, Ghaziabad and Goa. We work with properties in Goa, Uttarakhand, Himachal Pradesh, Madhya Pradesh, Dubai and Thailand.</p></div></section>
+<li>Honest advice, including when the answer is to change a room mix, a channel manager or a price you are attached to</li>
+<li>Pricing is custom to fit your budget. Tell us about the property and we will propose a plan.</li></ul></div></section>
+<section class="section"><div class="split"><div class="stack"><h2>Where we are based</h2></div><p>Our head office is in Dehradun, with teams in Ghaziabad and Goa. We work with properties across India, Dubai, Thailand, Bhutan, Sri Lanka and Nepal. See <a href="{href(p, "destinations")}">the markets we cover</a>.</p></div></section>
 {offices_html()}
 {cta_block(p)}'''
-    add(p, "About Revotel | Hotel Consultants in India", "Revotel is a hotel consulting firm led by Ravneet, working with owners and general managers on hotel launches, revenue management and distribution.",
-        body, [ORG, crumb_schema(crumbs)])
+    add(p, "About Ravneet Bhalla & Revotel | Hotel Consultants",
+        "Meet Ravneet Bhalla, ex MakeMyTrip Goa, with 10+ years in hospitality. He leads Revotel, Foodle+ and Towno, helping hotels grow revenue.",
+        body, [ORG, LOCAL, PERSON, crumb_schema(crumbs)])
 
 def contact_page():
     p = "contact"
@@ -764,7 +887,7 @@ def contact_page():
 }})();
 </script>'''
     html_ = page(p, "Contact Revotel | Hotel Consultants", "Contact Revotel for hotel launch, revenue management and OTA consulting. WhatsApp +91 81719 99631 or email ravneet@revotel.in.",
-                 body + script, [ORG, crumb_schema(crumbs)])
+                 body + script, [ORG, LOCAL, crumb_schema(crumbs)])
     PAGES.append((p, html_))
 
 def not_found():
@@ -936,7 +1059,7 @@ def article_page(a):
     crumbs = [("Home", ""), ("Insights", "insights"), (a["h1"], p)]
     related = "".join(f'<li><a href="{href(p, "insights/" + o["slug"])}">{e(o["h1"])}</a></li>' for o in ARTICLES if o["slug"] != a["slug"])
     body = f'''<section class="hero single"><div class="stack">{crumbs_html(p, crumbs)}<h1>{e(a["h1"])}</h1><p class="lead">{e(a["intro"])}</p>
-<p class="article-meta">By Ravneet, Revotel &middot; {a["date"]}</p></div></section>
+<p class="article-meta">By Ravneet Bhalla, Revotel &middot; {a["date"]}</p></div></section>
 <section class="section">{prose_html(a["sections"])}</section>
 <section class="section"><div class="split"><div class="stack"><h2>Related</h2></div><ul class="checks">{related}
 <li><a href="{href(p, "revenue-management")}">Hotel revenue management services</a></li></ul></div></section>
@@ -952,7 +1075,7 @@ def hub_insights():
     prow = "".join(
         f'<div class="row"><div><h3><a href="{href(p, "insights/" + o["slug"])}">{e(o["title"])}</a></h3><p class="muted">{_pretty_date(o["date"])}</p></div>'
         f'<div><p>{e(o["desc"])}</p></div></div>' for o in POSTS)
-    posts_sec = f'<section class="section"><div class="split"><div class="stack"><h2>Latest posts</h2><p class="muted">Short notes from Ravneet on hotel revenue, distribution and technology. Also on <a href="https://www.linkedin.com/in/revotel" rel="noopener">LinkedIn</a>.</p></div><div class="rows">{prow}</div></div></section>' if POSTS else ""
+    posts_sec = f'<section class="section"><div class="split"><div class="stack"><h2>Latest posts</h2><p class="muted">Short notes from Ravneet Bhalla on hotel revenue, distribution and technology. Also on <a href=LINKEDIN rel="noopener">LinkedIn</a>.</p></div><div class="rows">{prow}</div></div></section>' if POSTS else ""
     rows = "".join(
         f'<div class="row"><div><h3><a href="{href(p, "insights/" + a["slug"])}">{e(a["h1"])}</a></h3></div>'
         f'<div><p>{e(a["intro"])}</p></div></div>' for a in ARTICLES)
@@ -1020,14 +1143,14 @@ def post_page(po):
     paras = "".join("<p>" + e(x).replace("\n", "<br>") + "</p>" for x in po["paras"])
     li = f'<a class="btn" href="{e(po["url"])}" rel="noopener" target="_blank">See the original on LinkedIn</a>' if po["url"] else ""
     related = "".join(f'<li><a href="{href(p, "insights/" + o["slug"])}">{e(o["title"])}</a></li>' for o in POSTS[:5] if o["slug"] != po["slug"])
-    rel_block = f'<section class="section"><div class="split"><div class="stack"><h2>More from Ravneet</h2></div><ul class="checks">{related}<li><a href="{href(p, "insights")}">All insights</a></li></ul></div></section>'
+    rel_block = f'<section class="section"><div class="split"><div class="stack"><h2>More from Ravneet Bhalla</h2></div><ul class="checks">{related}<li><a href="{href(p, "insights")}">All insights</a></li></ul></div></section>'
     body = f'''<section class="hero single"><div class="stack">{crumbs_html(p, crumbs)}<h1>{e(po["title"])}</h1>
-<p class="article-meta">By Ravneet, Revotel &middot; {_pretty_date(po["date"])}</p></div></section>
+<p class="article-meta">By Ravneet Bhalla, Revotel &middot; {_pretty_date(po["date"])}</p></div></section>
 <section class="section"><div class="prose">{paras}</div><div class="btn-row" style="margin-top:1.6rem">{li}<a class="btn primary" href="https://wa.me/{PHONE1_WA}">Talk to Ravneet on WhatsApp</a></div></section>
 {rel_block}
 {cta_block(p, "Talk to a hotel revenue consultant")}'''
     art = {"@context": "https://schema.org", "@type": "BlogPosting", "headline": po["title"], "description": po["desc"],
-           "datePublished": po["date"], "dateModified": po["date"], "author": {"@type": "Person", "name": "Ravneet", "sameAs": "https://www.linkedin.com/in/revotel"},
+           "datePublished": po["date"], "dateModified": po["date"], "author": {"@id": BASE + "/about/#ravneet"},
            "publisher": {"@id": BASE + "/#org"}, "mainEntityOfPage": BASE + "/" + p + "/"}
     if po["url"]:
         art["sameAs"] = po["url"]
@@ -1108,6 +1231,8 @@ if not PREVIEW:
     os.makedirs(os.path.join(OUT, "images"))
     shutil.copy(os.path.join(HERE, "logo.png"), os.path.join(OUT, "images", "logo.png"))
     shutil.copytree(os.path.join(HERE, "ota"), os.path.join(OUT, "images", "ota"))
+    for _f in ("ravneet.jpg", "og-default.png"):
+        shutil.copy(os.path.join(HERE, "images", _f), os.path.join(OUT, "images", _f))
     os.makedirs(os.path.join(OUT, "css"))
     open(os.path.join(OUT, "css", "style.css"), "w", encoding="utf-8").write(CSS)
     open(os.path.join(OUT, "404.html"), "w", encoding="utf-8").write(not_found())

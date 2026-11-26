@@ -68,7 +68,7 @@ L("dehradun", "Dehradun", "Cities", "Dehradun, Rajpur Road, Mussoorie road, Raip
    ("October to November","Festivals, wedding season and school events","Price wedding dates and festival weekends higher, sell room blocks"),
    ("December to February","Winter weddings, New Year and clear-weather travel","Price New Year and wedding dates early, set minimum stays")],
   ["Weekday business rates that are too low or too fixed","Wedding and event dates sold by phone with no rate rules","Overflow demand from Mussoorie that goes to competitors","Many new hotels competing for the same OTA rank"],
-  "Do you have an office in Dehradun?", "Yes. Our Dehradun office is at 2nd Floor, 1 GMS Road, Towno, Ballupur, Dehradun 248001."),
+  "Do you have an office in Dehradun?", "Yes. Our Dehradun office is at Towno/Foodle Plus, 2nd Floor 1, GMS Rd, above Khopche Restaurant, Nehru Enclave, Satya Vihar, Ballupur, Dehradun, Uttarakhand 248001."),
 
 L("haridwar", "Haridwar", "Pilgrimage and spiritual towns", "Haridwar, Har Ki Pauri, Jwalapur, Kankhal, Roorkee road",
   "Haridwar is a pilgrimage city with sharp demand peaks: Kanwar Yatra, major bathing dates, Ganga festivals and the start of the Char Dham yatra. Many guests travel in groups and book late. We help Haridwar hotels and dharamshala-style stays price the peaks, handle group demand and fill the quieter days.",
