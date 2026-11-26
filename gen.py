@@ -5,7 +5,7 @@ import sys, os, json, html, shutil
 
 OUT, MODE = sys.argv[1], sys.argv[2]
 PREVIEW = MODE == "preview"
-BASE = "https://www.revotel.in"
+BASE = "https://revotel.in"
 HERE = os.path.dirname(os.path.abspath(__file__))
 CSS = open(os.path.join(HERE, "style.css"), encoding="utf-8").read()
 import datetime
@@ -13,17 +13,24 @@ TODAY = datetime.date.today().isoformat()
 GUIDE_DATE = "2026-10-13"
 
 PHONE1, PHONE1_TEL, PHONE1_WA = "+91 81719 99631", "+918171999631", "918171999631"
-EMAIL2 = "ravneet@revotel.in"
-TAWK = """<!--Start of Tawk.to Script-->
+EMAIL2 = "info@revotel.in"
+TAWK = """<!--Start of Tawk.to Script (loads after first interaction or a few seconds, to keep pages fast)-->
 <script type="text/javascript">
 var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
+Tawk_API.customStyle={visibility:{desktop:{position:'bl',xOffset:20,yOffset:20},mobile:{position:'bl',xOffset:10,yOffset:10}}};
 (function(){
+var done=false;
+function load(){
+if(done) return; done=true;
 var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
 s1.async=true;
 s1.src='https://embed.tawk.to/59562344e9c6d324a47381cd/default';
 s1.charset='UTF-8';
 s1.setAttribute('crossorigin','*');
 s0.parentNode.insertBefore(s1,s0);
+}
+["scroll","pointerdown","keydown","touchstart"].forEach(function(ev){window.addEventListener(ev,load,{once:true,passive:true});});
+window.addEventListener("load",function(){setTimeout(load,6000);});
 })();
 </script>
 <!--End of Tawk.to Script-->"""
@@ -352,7 +359,7 @@ CHANNEL_MANAGERS = ["STAAH", "Aiosell"]
 LINKEDIN = "https://www.linkedin.com/in/ravneetbhalla/"
 ADDR_FULL = "Towno/Foodle Plus, 2nd Floor 1, GMS Rd, above Khopche Restaurant, Nehru Enclave, Satya Vihar, Ballupur, Dehradun, Uttarakhand 248001"
 ADDR_STREET = "Towno/Foodle Plus, 2nd Floor 1, GMS Rd, above Khopche Restaurant, Nehru Enclave, Satya Vihar, Ballupur"
-OG_IMG = "https://www.revotel.in/images/og-default.png"
+OG_IMG = BASE + "/images/og-default.png"
 FOODLE = "https://foodleplus.com"
 
 def spath(s):
@@ -630,7 +637,7 @@ def build_home():
 <section class="section"><div class="split"><div class="stack"><h2>Results</h2><p class="muted">Three Goa case studies, from channel manager reports. Hotel names withheld.</p><a class="btn" href="{href(p, "results")}">See the results</a></div>
 <div class="rows"><div class="row"><div><h3><a href="{href(p, "results")}#hotel-33">33-room hotel, North Goa</a></h3></div><div><p><span class="pct up">{sgn(_g(C1T["pre"]["rv"][1], C1T["pre"]["rv"][0]))}</span> revenue and <span class="pct up">{sgn(_g(C1T["pre"]["rn"][1], C1T["pre"]["rn"][0]))}</span> room nights, January to August 2025 against the same months before we started.</p></div></div>
 <div class="row"><div><h3><a href="{href(p, "results")}#cottages-40">40-room luxury cottage resort, North Goa</a></h3></div><div><p><span class="pct up">{sgn(_g(C2_T[3], C2_T[2]))}</span> revenue and <span class="pct up">{sgn(_g(C2_T[1], C2_T[0]))}</span> room nights, September to November 2026 against the same months last year.</p></div></div>
-<div class="row"><div><h3><a href="{href(p, "results")}#resort-80">Luxury beach resort, North Goa</a></h3></div><div><p><span class="pct up">{sgn(_g(C3_T[3], C3_T[2]))}</span> revenue and <span class="pct up">{sgn(_g(C3_T[1], C3_T[0]))}</span> room nights, September to November 2026 against the same months last year.</p></div></div></div></div></section>
+<div class="row"><div><h3><a href="{href(p, "results")}#resort-80">85-room luxury beach resort, North Goa</a></h3></div><div><p><span class="pct up">{sgn(_g(C3_T[3], C3_T[2]))}</span> revenue and <span class="pct up">{sgn(_g(C3_T[1], C3_T[0]))}</span> room nights, September to November 2026 against the same months last year.</p></div></div></div></div></section>
 
 <section class="section tech"><div class="stack" style="gap:1.6rem"><div class="stack"><h2>Technology: Foodle+</h2>
 <p class="lead">Foodle+ is our hotel PMS, guest experience management system (GEMS) and POS, built with AI and powered by automation. It syncs with STAAH and Aiosell. Use the PMS, the GEMS, or both. Guests scan a QR code to order services, housekeeping, in-room dining, room upgrades and leave reviews, in five languages.</p></div>
@@ -741,7 +748,7 @@ def hub_tech():
     body = f'''<section class="hero single"><div class="stack">{crumbs_html(p, crumbs)}<h1>Foodle+ cloud PMS and hotel technology</h1>
 <p class="lead">Foodle+ is our AI hotel PMS, guest experience system and POS. We pair it with channel managers we trust and a revenue team that sets the rates. Foodle+ is also written Foodle Plus, or FP for short. Pricing is custom to your property and budget.</p></div></section>
 <section class="section"><div class="rows">{rows}</div></section>
-<section class="section"><div class="split"><div class="stack"><h2>Hotel PMS guides</h2><p class="muted">Plain-language help for choosing a cloud PMS.</p></div><div class="rows">{grows}</div></div></section>{cta_block(p, "See Foodle+ at your hotel")}'''
+<section class="section"><div class="split"><div class="stack"><h2>Hotel PMS guides</h2><p class="muted">Plain-language help for choosing a cloud PMS. Foodle+ is our own product, and these guides say so.</p></div><div class="rows">{grows}</div></div></section>{cta_block(p, "See Foodle+ at your hotel")}'''
     add(p, "Foodle+ Cloud PMS & GEMS for Hotels in India | Revotel",
         "Foodle+ is a cloud hotel PMS, guest experience system (GEMS) and POS built with AI, working with STAAH and Aiosell. Plus plain guides to choosing a PMS.",
         body, [ORG, crumb_schema(crumbs)])
@@ -897,7 +904,7 @@ def contact_page():
     window.location.href="mailto:{EMAIL2}?subject="+encodeURIComponent("Enquiry from revotel.in")+"&body="+encodeURIComponent(text());}});
 }})();
 </script>'''
-    html_ = page(p, "Contact Revotel | Hotel Consultants", "Contact Revotel for hotel launch, revenue management and OTA consulting. WhatsApp +91 81719 99631 or email ravneet@revotel.in.",
+    html_ = page(p, "Contact Revotel | Hotel Consultants", "Contact Revotel for hotel launch, revenue management and OTA consulting. WhatsApp +91 81719 99631 or email info@revotel.in.",
                  body + script, [ORG, LOCAL, crumb_schema(crumbs)])
     PAGES.append((p, html_))
 
@@ -1002,7 +1009,7 @@ def results_page():
     adr = lambda t, i: t[2 + i] / t[i]
     body = f'''<section class="hero single"><div class="stack">{crumbs_html(p, crumbs)}<h1>Hotel revenue management case studies: three Goa properties</h1>
 <p class="lead">How we grew room nights and revenue for a struggling 33-room hotel and two North Goa resorts. Figures come from channel manager booking reports. Hotel names are withheld to protect our clients.</p>
-<ul class="chips"><li><a href="#hotel-33">33-room hotel</a></li><li><a href="#cottages-40">40-room cottages</a></li><li><a href="#resort-80">Luxury beach resort</a></li></ul></div></section>
+<ul class="chips"><li><a href="#hotel-33">33-room hotel</a></li><li><a href="#cottages-40">40-room cottages</a></li><li><a href="#resort-80">85-room beach resort</a></li></ul></div></section>
 
 <section class="section" id="hotel-33"><div class="stack" style="gap:1.6rem"><div class="stack" style="gap:.5rem"><h2>Case study 1: a 33-room hotel in North Goa, from struggling to growing in peak and off season</h2>
 <div class="result-meta"><span>We started in September 2024</span><span>Year 2025 compared with 2024</span><span>Online bookings through the channel manager</span></div>
@@ -1030,7 +1037,7 @@ def results_page():
 <div class="stack"><h3>By channel</h3>{_chan_table(C2_CH, C2_T, "2025", "2026")}
 <p class="caption">Room nights and revenue by booking channel. The hotel website is the property's own direct bookings. Revenue and ADR as reported by the channel manager, inclusive of taxes and commissions. Counted by the month the booking was made.</p></div></div></section>
 
-<section class="section" id="resort-80"><div class="stack" style="gap:1.6rem"><div class="stack" style="gap:.5rem"><h2>Case study 3: a luxury beach resort in North Goa</h2>
+<section class="section" id="resort-80"><div class="stack" style="gap:1.6rem"><div class="stack" style="gap:.5rem"><h2>Case study 3: an 85-room luxury beach resort in North Goa</h2>
 <div class="result-meta"><span>September to November 2026 compared with September to November 2025</span><span>Online bookings through the channel manager</span></div>
 <p class="muted">Growth came from more room nights, a slightly higher average rate and a much bigger share of direct bookings on the hotel's own website.</p></div>
 {kpis([("Room nights", c3[0], f"{num(C3_T[0])} to {num(C3_T[1])}"), ("Revenue", c3[1], f"{inr(C3_T[2])} to {inr(C3_T[3])}"), ("Average rate (ADR)", c3[2], f"₹{num(adr(C3_T, 0))} to ₹{num(adr(C3_T, 1))}")])}
@@ -1187,12 +1194,19 @@ def _slugify(t):
 
 def _post_excerpt(title, flat):
     t = flat.strip()
-    # drop a leading repeat of the title (with or without the year), then any joining punctuation
-    for cand in (title, _re.sub(r"\s*\b20\d\d\b", "", title)):
-        c = cand.strip().rstrip(".")
-        if c and t.lower().startswith(c.lower()):
-            t = t[len(c):]
+    # drop leading words that just repeat the title (the whole title, or a run of it), and a trailing year
+    tw = [w.lower() for w in _re.findall(r"[A-Za-z0-9+]+", title)]
+    tj = " " + " ".join(tw) + " "
+    ms = list(_re.finditer(r"[A-Za-z0-9+]+", t))
+    k = 0
+    while k < len(ms) and k < len(tw) + 2:
+        run = " " + " ".join(m.group(0).lower() for m in ms[:k + 1]) + " "
+        if run in tj:
+            k += 1
+        else:
             break
+    if k >= 3:
+        t = t[ms[k - 1].end():]
     t = _re.sub(r"^[\s,.:;\-\u2013\u2014]+", "", t)
     t = _re.sub(r"^20\d\d[\s,.:;\-]*", "", t)
     if t:
@@ -1361,5 +1375,9 @@ ErrorDocument 404 /404.html
 os.makedirs(os.path.join(OUT, "admin"), exist_ok=True)
 open(os.path.join(OUT, "admin", "index.html"), "w", encoding="utf-8").write(ADMIN_HTML)
 if not PREVIEW:
-    open(os.path.join(OUT, "_headers"), "w").write("/admin/*\n  X-Robots-Tag: noindex, nofollow\n  Cache-Control: no-store\n")
+    open(os.path.join(OUT, "_headers"), "w").write(
+        "/*\n  X-Content-Type-Options: nosniff\n  X-Frame-Options: SAMEORIGIN\n  Referrer-Policy: strict-origin-when-cross-origin\n"
+        "  Permissions-Policy: camera=(), microphone=(), geolocation=(), payment=()\n  Strict-Transport-Security: max-age=31536000\n"
+        "/images/*\n  Cache-Control: public, max-age=604800\n/css/*\n  Cache-Control: public, max-age=3600\n"
+        "/admin/*\n  X-Robots-Tag: noindex, nofollow\n  Cache-Control: no-store\n")
 print(len(PAGES), "pages ->", OUT)
