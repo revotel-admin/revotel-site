@@ -831,7 +831,10 @@ def dest_page(d):
 def about_page():
     p = "about"
     crumbs = [("Home", ""), ("About", "about")]
-    photo = ("data:image/jpeg;base64," + base64.b64encode(open(os.path.join(HERE, "images", "ravneet.jpg"), "rb").read()).decode()) if PREVIEW else "/images/ravneet.jpg"
+    _pf = os.path.join(HERE, "images", "ravneet.jpg")
+    if not os.path.exists(_pf):
+        print("WARNING: images/ravneet.jpg missing in repo; About page photo skipped")
+    photo = ("data:image/jpeg;base64," + base64.b64encode(open(_pf, "rb").read()).decode()) if (PREVIEW and os.path.exists(_pf)) else "/images/ravneet.jpg"
     body = f'''<section class="hero single"><div class="stack">{crumbs_html(p, crumbs)}<h1>Ravneet Bhalla: hotel revenue consultant and head of Revotel</h1>
 <p class="lead">Revotel is led by Ravneet Bhalla. We work closely with owners and general managers, because the best results come from knowing the property, the market and the people running it.</p></div></section>
 <section class="section"><div class="split"><div class="stack"><img src="{photo}" alt="Ravneet Bhalla, head of Revotel, Foodle+ and Towno" width="240" height="240" style="width:240px;height:240px;border-radius:24px;object-fit:cover" loading="lazy">
@@ -1232,7 +1235,10 @@ if not PREVIEW:
     shutil.copy(os.path.join(HERE, "logo.png"), os.path.join(OUT, "images", "logo.png"))
     shutil.copytree(os.path.join(HERE, "ota"), os.path.join(OUT, "images", "ota"))
     for _f in ("ravneet.jpg", "og-default.png"):
-        shutil.copy(os.path.join(HERE, "images", _f), os.path.join(OUT, "images", _f))
+        if os.path.exists(os.path.join(HERE, "images", _f)):
+            shutil.copy(os.path.join(HERE, "images", _f), os.path.join(OUT, "images", _f))
+        else:
+            print("WARNING: images/" + _f + " missing in repo")
     os.makedirs(os.path.join(OUT, "css"))
     open(os.path.join(OUT, "css", "style.css"), "w", encoding="utf-8").write(CSS)
     open(os.path.join(OUT, "404.html"), "w", encoding="utf-8").write(not_found())
