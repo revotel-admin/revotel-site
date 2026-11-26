@@ -627,9 +627,10 @@ def build_home():
 <a class="btn" href="{href(p, "revenue-management")}">Revenue management services</a></div>
 <ul class="checks">{rm_does}</ul></div></section>
 
-<section class="section"><div class="split"><div class="stack"><h2>Results</h2><p class="muted">Same months, compared with before and last year. Hotel names withheld.</p><a class="btn" href="{href(p, "results")}">See the results</a></div>
-<div class="rows"><div class="row"><div><h3>80-room beach resort</h3></div><div><p><span class="pct up">{sgn(RES["B"]["rev"])}</span> revenue and <span class="pct up">{sgn(RES["B"]["rn"])}</span> room nights, July to September 2026.</p></div></div>
-<div class="row"><div><h3>33-room hotel, North Goa</h3></div><div><p><span class="pct up">{sgn(_g(sum(RES["A3"]["rv26"][:8]),sum(RES["A3"]["rv24"][:8])))}</span> revenue and <span class="pct up">{sgn(_g(sum(RES["A3"]["rn26"][:8]),sum(RES["A3"]["rn24"][:8])))}</span> room nights, January to August 2026 against the same months in 2024, before we started.</p></div></div></div></div></section>
+<section class="section"><div class="split"><div class="stack"><h2>Results</h2><p class="muted">Three Goa case studies, from channel manager reports. Hotel names withheld.</p><a class="btn" href="{href(p, "results")}">See the results</a></div>
+<div class="rows"><div class="row"><div><h3><a href="{href(p, "results")}#hotel-33">33-room hotel, North Goa</a></h3></div><div><p><span class="pct up">{sgn(_g(C1T["pre"]["rv"][1], C1T["pre"]["rv"][0]))}</span> revenue and <span class="pct up">{sgn(_g(C1T["pre"]["rn"][1], C1T["pre"]["rn"][0]))}</span> room nights, January to August 2025 against the same months before we started.</p></div></div>
+<div class="row"><div><h3><a href="{href(p, "results")}#cottages-40">40-room luxury cottage resort, North Goa</a></h3></div><div><p><span class="pct up">{sgn(_g(C2_T[3], C2_T[2]))}</span> revenue and <span class="pct up">{sgn(_g(C2_T[1], C2_T[0]))}</span> room nights, September to November 2026 against the same months last year.</p></div></div>
+<div class="row"><div><h3><a href="{href(p, "results")}#resort-80">Luxury beach resort, North Goa</a></h3></div><div><p><span class="pct up">{sgn(_g(C3_T[3], C3_T[2]))}</span> revenue and <span class="pct up">{sgn(_g(C3_T[1], C3_T[0]))}</span> room nights, September to November 2026 against the same months last year.</p></div></div></div></div></section>
 
 <section class="section tech"><div class="stack" style="gap:1.6rem"><div class="stack"><h2>Technology: Foodle+</h2>
 <p class="lead">Foodle+ is our hotel PMS, guest experience management system (GEMS) and POS, built with AI and powered by automation. It syncs with STAAH and Aiosell. Use the PMS, the GEMS, or both. Guests scan a QR code to order services, housekeeping, in-room dining, room upgrades and leave reviews, in five languages.</p></div>
@@ -907,10 +908,7 @@ def not_found():
     return page("404", "Page not found | Revotel", "Page not found.", body, [], noindex=True)
 
 
-# ---------- results ----------
-RES = json.load(open(os.path.join(HERE, "results.json")))
-MONTHS = [("01", "January"), ("02", "February"), ("03", "March"), ("04", "April"), ("05", "May")]
-
+# ---------- results: three anonymised case studies (data from channel manager reports) ----------
 def sgn(v, d=0):
     r = round(v, d)
     if r == 0: r = 0.0
@@ -920,67 +918,134 @@ def pct_span(v):
     cls = "up" if round(v) >= 0 else "down"
     return f'<span class="pct {cls}">{sgn(v)}</span>'
 
-def kpi_row(rn, adr, rev):
-    items = [("Room nights", rn), ("ADR", adr), ("RevPAR*", rev), ("Revenue", rev)]
-    return '<div class="kpis">' + "".join(
-        f'<div class="kpi{" neg" if round(v) < 0 else ""}"><strong>{sgn(v)}</strong><span>{l}</span></div>' for l, v in items) + '</div>'
-
-def index_chart(rn, adr, rev):
-    mx = max(100 + rn, 100 + adr, 100 + rev)
-    rows = ""
-    for label, g in [("Room nights", rn), ("ADR", adr), ("RevPAR*", rev), ("Revenue", rev)]:
-        rows += (f'<div class="index-row"><b>{label}</b><div class="index-bars">'
-                 f'<div class="ibar"><i style="width:{100 / mx * 80:.1f}%"></i><span>last year 100</span></div>'
-                 f'<div class="ibar now"><i style="width:{(100 + g) / mx * 80:.1f}%"></i><span>this year {100 + g:.0f}</span></div></div></div>')
-    return f'<div class="index-chart" role="img" aria-label="Index chart: same period last year equals 100">{rows}</div>'
-
 def _g(a, b):
     return 100 * (a / b - 1)
+
+def inr(x):
+    """x in rupees -> lakh / crore text"""
+    if x >= 1e7: return "₹%.2f Cr" % (x / 1e7)
+    return "₹%.2f L" % (x / 1e5)
+
+def num(n):
+    return f"{n:,.0f}"
+
+def kpis(items):
+    """items: (label, growth_pct, detail)"""
+    return '<div class="kpis">' + "".join(
+        f'<div class="kpi{" neg" if round(g) < 0 else ""}"><strong>{sgn(g)}</strong><span>{l}</span>'
+        f'<em style="font-style:normal;color:var(--muted);font-size:.85rem">{e(d)}</em></div>' for l, g, d in items) + '</div>'
+
+# Case 1: 33-room hotel, North Goa. Revotel started in September 2024. Revenue in lakh rupees.
+C1 = dict(
+    rn24=[76, 114, 112, 103, 133, 99, 73, 91, 269, 218, 312, 391],
+    rn25=[300, 243, 273, 373, 283, 249, 202, 178, 219, 322, 333, 403],
+    rv24=[7.14, 10.46, 9.55, 7.24, 8.56, 7.24, 6.12, 6.63, 17.60, 17.59, 24.37, 28.97],
+    rv25=[19.94, 15.92, 15.19, 17.80, 13.60, 12.88, 9.94, 9.31, 13.34, 18.44, 20.82, 28.11],
+    bk24=[36, 42, 47, 41, 46, 57, 29, 47, 103, 79, 118, 135],
+    bk25=[106, 110, 120, 138, 120, 106, 68, 77, 85, 136, 121, 139])
+MON = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
+
+# Cases 2 and 3: 1 Sep to 30 Nov 2025 against 1 Sep to 27 Nov 2026. (name, room nights 25, 26, revenue rupees 25, 26)
+C2_CH = [("booking.com", 112, 132, 366398.10, 703332.71), ("agoda", 5, 8, 20734.39, 40736.71), ("cleartrip", 21, 85, 74245.24, 424004.80),
+         ("goibibo", 11, 237, 59827.08, 1351982.29), ("Hotel website", 2, 16, 8702.00, 97540.00), ("travelguru", 0, 5, 0.0, 25719.01)]
+C2_T = (151, 483, 529906.81, 2643315.52)
+C3_CH = [("goibibo", 700, 753, 9916684.75, 11460922.20), ("travelguru", 35, 31, 394507.74, 486185.12), ("booking.com", 192, 246, 2663119.38, 3928178.99),
+         ("agoda", 132, 182, 1520690.56, 2049380.99), ("cleartrip", 9, 76, 162946.89, 1068295.15), ("Hotel website", 6, 145, 76370.00, 1975988.00),
+         ("expedia", 0, 3, 0.0, 53725.60), ("hotelbeds", 0, 46, 0.0, 522111.22)]
+C3_T = (1074, 1482, 14734319.32, 21544787.27)
+
+def _case_totals():
+    c = C1
+    s = lambda k, a, b: sum(c[k][a:b])
+    out = {}
+    for key, a, b in (("pre", 0, 8), ("peak", 0, 2), ("off", 5, 8), ("autumn", 8, 12), ("year", 0, 12)):
+        out[key] = dict(rn=(s("rn24", a, b), s("rn25", a, b)), rv=(s("rv24", a, b), s("rv25", a, b)), bk=(s("bk24", a, b), s("bk25", a, b)))
+    return out
+C1T = _case_totals()
+
+def _chan_rows(ch):
+    rows = ""
+    for n, r0, r1, v0, v1 in ch:
+        g1 = pct_span(_g(r1, r0)) if r0 else "new"
+        g2 = pct_span(_g(v1, v0)) if v0 else "new"
+        rows += (f'<tr><td>{e(n)}</td><td class="num">{num(r0)}</td><td class="num">{num(r1)}</td><td class="num">{g1}</td>'
+                 f'<td class="num">{inr(v0) if v0 else "₹0"}</td><td class="num">{inr(v1)}</td><td class="num">{g2}</td></tr>')
+    return rows
+
+def _chan_table(ch, tot, y0, y1):
+    r0, r1, v0, v1 = tot
+    head = (f'<thead><tr><th>Channel</th><th class="num">Room nights {y0}</th><th class="num">Room nights {y1}</th><th class="num">Change</th>'
+            f'<th class="num">Revenue {y0}</th><th class="num">Revenue {y1}</th><th class="num">Change</th></tr></thead>')
+    foot = (f'<tr><td><strong>Total</strong></td><td class="num"><strong>{num(r0)}</strong></td><td class="num"><strong>{num(r1)}</strong></td><td class="num">{pct_span(_g(r1, r0))}</td>'
+            f'<td class="num"><strong>{inr(v0)}</strong></td><td class="num"><strong>{inr(v1)}</strong></td><td class="num">{pct_span(_g(v1, v0))}</td></tr>')
+    return f'<div class="table-scroll"><table>{head}<tbody>{_chan_rows(ch)}{foot}</tbody></table></div>'
 
 def results_page():
     p = "results"
     crumbs = [("Home", ""), ("Results", "results")]
-    B = RES["B"]
-    D = RES["A3"]
-    sm = lambda x, i, j: sum(x[i:j])
-    def trio(r1, v1, r0, v0):
-        return (_g(r1, r0), _g(v1 / r1, v0 / r0), _g(v1, v0))
-    k_before = trio(sm(D["rn26"], 0, 8), sm(D["rv26"], 0, 8), sm(D["rn24"], 0, 8), sm(D["rv24"], 0, 8))
-    k_yoy = trio(sm(D["rn26"], 0, 9), sm(D["rv26"], 0, 9), sm(D["rn25"], 0, 9), sm(D["rv25"], 0, 9))
-    NAMES = ["January", "February", "March", "April", "May", "June", "July", "August"]
+    T = C1T
+    def tri(k):
+        return _g(T[k]["rn"][1], T[k]["rn"][0]), _g(T[k]["rv"][1], T[k]["rv"][0]), _g(T[k]["bk"][1], T[k]["bk"][0])
+    pre, peak, off, aut, yr = tri("pre"), tri("peak"), tri("off"), tri("autumn"), tri("year")
+    adr24, adr25 = T["year"]["rv"][0] * 1e5 / T["year"]["rn"][0], T["year"]["rv"][1] * 1e5 / T["year"]["rn"][1]
     mrows = ""
-    for i, name in enumerate(NAMES):
-        mrows += (f'<tr><td>{name}</td><td class="num">{pct_span(_g(D["rn26"][i], D["rn24"][i]))}</td>'
-                  f'<td class="num">{pct_span(_g(D["rv26"][i], D["rv24"][i]))}</td>'
-                  f'<td class="num">{pct_span(_g(D["rv25"][i], D["rv24"][i]))}</td></tr>')
-    body = f'''<section class="hero single"><div class="stack">{crumbs_html(p, crumbs)}<h1>Results from hotels we work with</h1>
-<p class="lead">Growth for the same months, from online booking data. Hotel names are withheld to protect our clients.</p></div></section>
+    for i, name in enumerate(MON):
+        a, b = C1["rn24"][i], C1["rn25"][i]
+        va, vb = C1["rv24"][i], C1["rv25"][i]
+        tag = "before we started" if i < 8 else "with us"
+        mrows += (f'<tr><td>{name} <span class="muted" style="font-size:.85em">({tag})</span></td><td class="num">{num(a)}</td><td class="num">{num(b)}</td><td class="num">{pct_span(_g(b, a))}</td>'
+                  f'<td class="num">{inr(va * 1e5)}</td><td class="num">{inr(vb * 1e5)}</td><td class="num">{pct_span(_g(vb, va))}</td></tr>')
+    mrows += (f'<tr><td><strong>Total</strong></td><td class="num"><strong>{num(T["year"]["rn"][0])}</strong></td><td class="num"><strong>{num(T["year"]["rn"][1])}</strong></td><td class="num">{pct_span(yr[0])}</td>'
+              f'<td class="num"><strong>{inr(T["year"]["rv"][0] * 1e5)}</strong></td><td class="num"><strong>{inr(T["year"]["rv"][1] * 1e5)}</strong></td><td class="num">{pct_span(yr[1])}</td></tr>')
+    c2 = (_g(C2_T[1], C2_T[0]), _g(C2_T[3], C2_T[2]), _g(C2_T[3] / C2_T[1], C2_T[2] / C2_T[0]))
+    c3 = (_g(C3_T[1], C3_T[0]), _g(C3_T[3], C3_T[2]), _g(C3_T[3] / C3_T[1], C3_T[2] / C3_T[0]))
+    adr = lambda t, i: t[2 + i] / t[i]
+    body = f'''<section class="hero single"><div class="stack">{crumbs_html(p, crumbs)}<h1>Hotel revenue management case studies: three Goa properties</h1>
+<p class="lead">How we grew room nights and revenue for a struggling 33-room hotel and two North Goa resorts. Figures come from channel manager booking reports. Hotel names are withheld to protect our clients.</p>
+<ul class="chips"><li><a href="#hotel-33">33-room hotel</a></li><li><a href="#cottages-40">40-room cottages</a></li><li><a href="#resort-80">Luxury beach resort</a></li></ul></div></section>
 
-<section class="section"><div class="stack" style="gap:1.6rem"><div class="stack" style="gap:.5rem"><h2>33-room 4-star hotel, North Goa</h2>
-<div class="result-meta"><span>Before and after Revotel started, same months</span><span>Online bookings through the channel manager</span></div></div>
-<div class="stack" style="gap:.6rem"><h3>January to August 2026 compared with January to August 2024, before we started</h3>
-{kpi_row(*k_before)}</div>
-<div class="stack" style="gap:.6rem"><h3>Latest year on year: January to September 2026 compared with January to September 2025</h3>
-{kpi_row(*k_yoy)}</div>
-<div class="split"><div class="stack"><h3>Month by month</h3><p class="muted">Each month against the same month in 2024. The last column shows 2025, the first full year with us.</p></div>
-<div class="stack"><div class="table-scroll"><table><thead><tr><th>Month</th><th class="num">Room nights 2026</th><th class="num">Revenue 2026</th><th class="num">Revenue 2025</th></tr></thead><tbody>{mrows}</tbody></table></div>
-<p class="caption">Counted by the month the booking was made. Online bookings only, not total hotel business. Room nights grew faster than revenue: the average rate per room night is lower than in 2024. *RevPAR is calculated on 33 rooms in all periods, so its growth matches revenue growth.</p></div></div></div></section>
+<section class="section" id="hotel-33"><div class="stack" style="gap:1.6rem"><div class="stack" style="gap:.5rem"><h2>Case study 1: a 33-room hotel in North Goa, from struggling to growing in peak and off season</h2>
+<div class="result-meta"><span>We started in September 2024</span><span>Year 2025 compared with 2024</span><span>Online bookings through the channel manager</span></div>
+<p class="muted">The hotel was struggling in Goa's peak season when we started. January to August 2024 is the before picture, and 2025 is the first full year with us.</p></div>
+<div class="stack" style="gap:.6rem"><h3>January to August: 2025 compared with 2024, before we started</h3>
+{kpis([("Room nights", pre[0], f"{num(T['pre']['rn'][0])} to {num(T['pre']['rn'][1])}"), ("Bookings", pre[2], f"{num(T['pre']['bk'][0])} to {num(T['pre']['bk'][1])}"), ("Revenue", pre[1], f"{inr(T['pre']['rv'][0] * 1e5)} to {inr(T['pre']['rv'][1] * 1e5)}")])}</div>
+<div class="split"><div class="stack"><h3>Peak and off season</h3><p class="muted">Both ends of the Goa calendar grew, not only the busy months.</p></div>
+<div class="stack"><div class="table-scroll"><table><thead><tr><th>Season</th><th class="num">Room nights</th><th class="num">Revenue</th></tr></thead><tbody>
+<tr><td>Peak season: January and February</td><td class="num">{pct_span(peak[0])}</td><td class="num">{pct_span(peak[1])}</td></tr>
+<tr><td>Off season: June to August</td><td class="num">{pct_span(off[0])}</td><td class="num">{pct_span(off[1])}</td></tr>
+<tr><td>Whole year 2025 against 2024</td><td class="num">{pct_span(yr[0])}</td><td class="num">{pct_span(yr[1])}</td></tr></tbody></table></div></div></div>
+<div class="stack"><h3>Month by month</h3><p class="muted">January to August 2024 is before we started. We began in September 2024, so autumn 2024 was our first period with the hotel.</p>
+<div class="table-scroll"><table><thead><tr><th>Month</th><th class="num">Room nights 2024</th><th class="num">Room nights 2025</th><th class="num">Change</th><th class="num">Revenue 2024</th><th class="num">Revenue 2025</th><th class="num">Change</th></tr></thead><tbody>{mrows}</tbody></table></div>
+<p class="caption">Counted by the month the booking was made. Online bookings through the channel manager only, not total hotel business. Revenue as reported by the channel manager, inclusive of taxes and commissions. September to December 2025 compared with the same months of 2024: room nights {sgn(aut[0])}, revenue {sgn(aut[1])}. Over the whole year, room nights grew faster than revenue, so the average rate per room night, inclusive of taxes, is lower: about ₹{num(adr24)} in 2024 and ₹{num(adr25)} in 2025. We worked with this hotel from September 2024 to early January 2026.</p></div>
+<div class="stack"><h3>Autumn 2025: what the market was telling us</h3>
+<div class="prose"><p>Autumn 2025 was softer than autumn 2024, and it is worth explaining why. Midway through the year the hotel's management changed. A revenue manager gives advice and the hotel decides, and sometimes the hotel chooses a different path. Here, that path did not suit the market.</p>
+<p>The booking window at this hotel is short: most guests book about three days before arrival. Looking ahead to December, the signals pointed one way:</p>
+<ul class="checks"><li>Few buying signals and little forward movement in enquiries</li><li>Charter flights were not running, and flight fares to Goa were very high</li><li>Comparable hotels were selling at lower rates</li><li>The 5-star hotels next door were priced at or below this hotel</li></ul>
+<p>Our advice was to run an early bird offer and win a share of the business early, then raise the rate in steps: sell, build occupancy, raise the rate, and repeat. The hotel preferred to hold a higher rate and review closer to the dates. With a booking window this short, early bookings did not come, and many rooms went unsold or were sold late at lower rates. The team reviewed the approach in December, rates were corrected, and the month recovered. Revenue management works best when the rate follows the market, and a step-up approach protects the average rate while still filling rooms.</p></div></div></div></section>
 
-<section class="section"><div class="stack" style="gap:1.6rem"><div class="stack" style="gap:.5rem"><h2>80-room 4-star luxury beach resort</h2>
-<div class="result-meta"><span>July to September 2026 compared with July to September 2025</span><span>Online bookings through the channel manager</span></div></div>
-{kpi_row(B["rn"], B["adr"], B["rev"])}
-<div class="split"><div class="stack"><h3>Same period last year = 100</h3><p class="muted">Room nights and ADR each grew by about 30%. Together they raised revenue by more than two thirds.</p></div>
-<div class="stack">{index_chart(B["rn"], B["adr"], B["rev"])}
-<p class="caption">Revenue is before tax. *RevPAR is calculated on 80 rooms in both periods, so its growth matches revenue growth.</p></div></div></div></section>
+<section class="section" id="cottages-40"><div class="stack" style="gap:1.6rem"><div class="stack" style="gap:.5rem"><h2>Case study 2: a 40-room luxury cottage resort in North Goa</h2>
+<div class="result-meta"><span>We started in early August 2026</span><span>September to November 2026 compared with September to November 2025</span><span>Online bookings through the channel manager</span></div>
+<p class="muted">The property was struggling for revenue when we took over. This is the first autumn with us compared with the autumn before.</p></div>
+{kpis([("Room nights", c2[0], f"{num(C2_T[0])} to {num(C2_T[1])}"), ("Revenue", c2[1], f"{inr(C2_T[2])} to {inr(C2_T[3])}"), ("Average rate (ADR)", c2[2], f"₹{num(adr(C2_T, 0))} to ₹{num(adr(C2_T, 1))}")])}
+<div class="stack"><h3>By channel</h3>{_chan_table(C2_CH, C2_T, "2025", "2026")}
+<p class="caption">Room nights and revenue by booking channel. The hotel website is the property's own direct bookings. Revenue and ADR as reported by the channel manager, inclusive of taxes and commissions. Counted by the month the booking was made.</p></div></div></section>
+
+<section class="section" id="resort-80"><div class="stack" style="gap:1.6rem"><div class="stack" style="gap:.5rem"><h2>Case study 3: a luxury beach resort in North Goa</h2>
+<div class="result-meta"><span>September to November 2026 compared with September to November 2025</span><span>Online bookings through the channel manager</span></div>
+<p class="muted">Growth came from more room nights, a slightly higher average rate and a much bigger share of direct bookings on the hotel's own website.</p></div>
+{kpis([("Room nights", c3[0], f"{num(C3_T[0])} to {num(C3_T[1])}"), ("Revenue", c3[1], f"{inr(C3_T[2])} to {inr(C3_T[3])}"), ("Average rate (ADR)", c3[2], f"₹{num(adr(C3_T, 0))} to ₹{num(adr(C3_T, 1))}")])}
+<div class="stack"><h3>By channel</h3>{_chan_table(C3_CH, C3_T, "2025", "2026")}
+<p class="caption">Room nights and revenue by booking channel. The hotel website is the property's own direct bookings. Revenue and ADR as reported by the channel manager, inclusive of taxes and commissions. Counted by the month the booking was made.</p></div></div></section>
 
 <section class="section"><div class="split"><div class="stack"><h2>How we measure</h2></div><ul class="checks">
 <li>Room nights: nights sold, counting each room separately</li>
-<li>ADR: average daily rate, revenue divided by room nights</li>
-<li>RevPAR: revenue per available room, calculated on the hotel's room count</li>
-<li>Revenue: room revenue before tax</li></ul></div></section>
-{cta_block(p, "Want numbers like these for your hotel?")}'''
-    add(p, "Hotel Revenue Management Results & Case Studies | Revotel",
-        "Before-and-after and year-on-year results from hotels using Revotel revenue management: room nights, ADR, RevPAR and revenue growth. Hotel names withheld.",
+<li>ADR: average daily rate, revenue divided by room nights, as reported by the channel manager and inclusive of taxes</li>
+<li>Revenue: as reported by the channel manager, inclusive of taxes and commissions, for online bookings only</li>
+<li>Same period comparisons use the same months, so seasons are not mixed</li>
+<li>Results depend on the property, the market and the time of year, and past results do not promise future ones</li></ul></div></section>
+{cta_block(p, "Want results like these for your hotel?")}'''
+    add(p, "Hotel Revenue Management Case Studies in Goa | Revotel",
+        "Three Goa case studies: a 33-room hotel grew room nights 70% in a year, and two resorts grew autumn revenue by 399% and 46%. Names withheld.",
         body, [ORG, crumb_schema(crumbs)])
 
 
