@@ -458,7 +458,7 @@ LOCAL = {"@context": "https://schema.org", "@type": ["LocalBusiness", "Professio
     "areaServed": [{"@type": "Country", "name": "India"}, {"@type": "Country", "name": "United Arab Emirates"}, {"@type": "Country", "name": "Thailand"}],
     "sameAs": [LINKEDIN], "priceRange": "Custom"}
 PERSON = {"@context": "https://schema.org", "@type": "Person", "@id": BASE + "/about/#ravneet", "name": "Ravneet Bhalla",
-    "jobTitle": "Head, Towno / Foodle+ / Revotel", "image": BASE + "/images/ravneet.jpg", "url": BASE + "/about/", "sameAs": [LINKEDIN],
+    "jobTitle": "Founder, Revotel; founding team, Towno / Foodle Plus", "image": BASE + "/images/ravneet.jpg", "url": BASE + "/about/", "sameAs": [LINKEDIN],
     "worksFor": [{"@type": "Organization", "name": "Intellego Tech Solutions"}, {"@id": BASE + "/#org"}],
     "knowsAbout": ["Hotel revenue management", "Hotel PMS", "Online travel agencies", "Hotel distribution"]}
 
@@ -845,14 +845,19 @@ def about_page():
     if not os.path.exists(_pf):
         print("WARNING: images/ravneet.jpg missing in repo; About page photo skipped")
     photo = ("data:image/jpeg;base64," + base64.b64encode(open(_pf, "rb").read()).decode()) if (PREVIEW and os.path.exists(_pf)) else "/images/ravneet.jpg"
-    body = f'''<section class="hero single"><div class="stack">{crumbs_html(p, crumbs)}<h1>Ravneet Bhalla: hotel revenue consultant and head of Revotel</h1>
+    body = f'''<section class="hero single"><div class="stack">{crumbs_html(p, crumbs)}<h1>Ravneet Bhalla: hotel revenue consultant and founder of Revotel</h1>
 <p class="lead">Revotel is led by Ravneet Bhalla. We work closely with owners and general managers, because the best results come from knowing the property, the market and the people running it.</p></div></section>
-<section class="section"><div class="split"><div class="stack"><img src="{photo}" alt="Ravneet Bhalla, head of Revotel, Foodle+ and Towno" width="240" height="240" style="width:240px;height:240px;border-radius:24px;object-fit:cover" loading="lazy">
+<section class="section"><div class="split"><div class="stack"><img src="{photo}" alt="Ravneet Bhalla of Revotel, Foodle+ and Towno" width="240" height="240" style="width:240px;height:240px;border-radius:24px;object-fit:cover" loading="lazy">
 <p><a class="btn" href="{LINKEDIN}" rel="me noopener" target="_blank">Ravneet on LinkedIn</a></p></div>
-<div class="prose"><h2>About Ravneet</h2>
-<p>Ravneet Bhalla is formerly with MakeMyTrip in Goa and has more than a decade of experience in hospitality. He heads Towno, Foodle+ and Revotel, which currently operate under the Intellego Tech Solutions brand.</p>
-<p>He trained as a doctor and physical therapist and practised in Bangalore before moving into hotels. He holds an MBA in Marketing and Sales and was top of his batch (2012 to 2014).</p>
-<p>That mix of OTA experience, hotel operations and technology is why Revotel pairs revenue management with its own PMS, Foodle+.</p></div></div></section>
+<div class="prose"><h2>About Ravneet Bhalla</h2>
+<p>Ravneet Bhalla was formerly with MakeMyTrip, heading Goa, and has more than a decade of experience in hospitality. He founded Revotel and is part of the founding team of Towno and Foodle Plus, which currently operate under the Intellego Tech Solutions brand.</p>
+<p>Ravneet is a doctor (physical therapist). He studied and practised in Bangalore before moving into hotels. He has also worked in operations at a sports company, where he developed and launched an inventory management process, and he has held a media profile as an emcee and karaoke jockey. He holds an MBA in Marketing and Sales and was top of his batch (2012 to 2014).</p>
+<p>That mix of OTA experience, hotel operations and technology is why Revotel pairs revenue management with its own PMS, Foodle+.</p>
+<p>The Revotel team works with hotels, resorts, B&amp;Bs, guest houses and apartments in India, Thailand and other markets, most of them in Goa. Ravneet's own track record since 2017 covers more than 100 such properties, and the work goes well beyond launches.</p></div></div></section>
+<section class="section"><div class="split"><div class="stack"><h2>What this experience covers</h2><p class="muted">Hotels bring in the Revotel team for a launch, a relaunch or a specific problem. Typical work:</p></div>
+<div class="stack"><ul class="checks"><li>Launches, pre-opening and reopenings</li><li>OTA setup, listing and strategy</li><li>Content clean-up, photo shoots and photo reorganisation</li><li>Promotions, influencer marketing and offline sales</li><li>Websites, social media profiles and staff training</li><li>Consulting and rate strategy, from a single week to long-term revenue management</li></ul>
+<div class="card"><h3>Example: a short on-site engagement</h3><p>The owner of a branded hotel asked for help with content and promotions across all of its OTAs, and with repositioning the hotel as a premium luxury product. The Revotel team stayed on site for three days, reorganised the photos, rewrote the content, mapped the promotions to each OTA and repositioned the product. This was a short paid consulting job, not ongoing revenue management. Occupancy reached around 70 to 80% within a month.</p>
+<p class="caption">Hotel name withheld. Results depend on the property, market and season, and are not a promise for every hotel.</p></div></div></div></section>
 <section class="section"><div class="split"><div class="stack"><h2>How we work</h2></div><ul class="checks">
 <li>One point of contact who knows your property, not a rotating account team</li>
 <li>Decisions backed by data from your market and your competitor set</li>
@@ -864,7 +869,7 @@ def about_page():
 {offices_html()}
 {cta_block(p)}'''
     add(p, "About Ravneet Bhalla & Revotel | Hotel Consultants",
-        "Meet Ravneet Bhalla, ex MakeMyTrip Goa, with 10+ years in hospitality. He leads Revotel, Foodle+ and Towno, helping hotels grow revenue.",
+        "Meet Ravneet Bhalla, ex MakeMyTrip Goa head. 10+ years in hospitality, 100+ hotels worked with since 2017. Founder of Revotel.",
         body, [ORG, LOCAL, PERSON, crumb_schema(crumbs)])
 
 def contact_page():
