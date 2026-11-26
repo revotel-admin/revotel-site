@@ -303,7 +303,7 @@ HOME_FAQS = [
 
 # ===== tech data + helpers (inserted before helpers) =====
 TECH = [
- dict(slug="foodle-plus", name="Foodle+ (FP)", short="Our AI hotel PMS, guest experience system (GEMS) and POS, built with AI and powered by automation.",
+ dict(slug="foodle-plus", name="Foodle+", short="Our AI hotel PMS, guest experience system (GEMS) and POS, built with AI and powered by automation.",
   title="Foodle+ Cloud PMS & Guest Experience Management System (GEMS) | Revotel",
   desc="Foodle+ is a cloud-based hotel PMS, guest experience management system (GEMS) and POS built with AI and automation. A PMS that works with STAAH and Aiosell, for hotels, resorts and B&Bs in India.",
   h1="Foodle+: AI hotel PMS, guest experience system and POS",
@@ -405,7 +405,7 @@ OFFICES = [
 def offices_html(heading="Our locations", cls="offices"):
     cards = ""
     for o in OFFICES:
-        addr = "".join(f"<span>{e(l)}</span>" for l in o["lines"]) or (f'<span class="muted">{e(o["region"])}</span>' if o["region"] != o["city"] else '<span class="muted">Team based here, available on call</span>')
+        addr = "".join(f"<span>{e(l)}</span>" for l in o["lines"]) or '<span class="muted">Team based here, available on call</span>'
         link = f'<a class="more" href="{o["maps"]}" rel="noopener" target="_blank">Open in Maps</a>' if o["maps"] else ""
         cards += f'<li><h3>{e(o["city"])}</h3><address>{addr}</address>{link}</li>'
     return f'<section class="section"><div class="split"><div class="stack"><h2>{e(heading)}</h2><p class="muted">Revotel works from Dehradun, Ghaziabad and Goa, and travels to properties across India, Dubai, Thailand, Bhutan, Sri Lanka and Nepal.</p></div><ul class="{cls}">{cards}</ul></div></section>'
@@ -1075,7 +1075,7 @@ def article_page(a):
 <li><a href="{href(p, "revenue-management")}">Hotel revenue management services</a></li></ul></div></section>
 {cta_block(p, "Talk to a hotel revenue consultant")}'''
     art = {"@context": "https://schema.org", "@type": "Article", "headline": a["h1"], "description": a["desc"],
-           "datePublished": a["date"], "dateModified": a["date"], "author": {"@type": "Person", "name": "Ravneet"},
+           "datePublished": a["date"], "dateModified": a["date"], "author": {"@id": BASE + "/about/#ravneet"},
            "publisher": {"@id": BASE + "/#org"}, "mainEntityOfPage": BASE + "/" + p + "/"}
     add(p, a["title"], a["desc"], body, [ORG, art, crumb_schema(crumbs)], og_type="article")
 
@@ -1087,7 +1087,7 @@ def hub_insights():
         f'<div><p>{e(o["desc"])}</p></div></div>' for o in POSTS)
     posts_sec = f'<section class="section"><div class="split"><div class="stack"><h2>Latest posts</h2><p class="muted">Short notes from Ravneet Bhalla on hotel revenue, distribution and technology. Also on <a href="{LINKEDIN}" rel="me noopener">LinkedIn</a>.</p></div><div class="rows">{prow}</div></div></section>' if POSTS else ""
     rows = "".join(
-        f'<div class="row"><div><h3><a href="{href(p, "insights/" + a["slug"])}">{e(a["h1"])}</a></h3></div>'
+        f'<div class="row"><div><h3><a href="{href(p, "insights/" + a["slug"])}">{e(a["h1"])}</a></h3><p class="muted">{_pretty_date(a["date"])}</p></div>'
         f'<div><p>{e(a["intro"])}</p></div></div>' for a in ARTICLES)
     body = f'''<section class="hero single"><div class="stack">{crumbs_html(p, crumbs)}<h1>Hotel revenue and technology insights</h1>
 <p class="lead">Notes and plain-language guides for hotel owners on pricing, distribution, launches and technology.</p></div></section>
@@ -1102,6 +1102,7 @@ def privacy_page():
     crumbs = [("Home", ""), ("Privacy", "privacy")]
     body = f'''<section class="hero single"><div class="stack">{crumbs_html(p, crumbs)}<h1>Privacy</h1><p class="muted">Last updated 26 November 2026</p></div></section>
 <section class="section"><div class="prose">
+<h2>Who we are</h2><p>This site is run by Revotel, part of Intellego Tech Solutions, based at the Dehradun address on our <a href="{href(p, "contact")}">contact page</a>. Revotel is the data controller for the information described below.</p>
 <h2>What this site collects</h2><p>This site does not store your details. The contact form creates a message on your own device and opens WhatsApp or your email app. Nothing you type is sent to our servers until you send the message yourself.</p>
 <h2>Messages you send us</h2><p>When you contact us on WhatsApp, by email or by phone, we use your details only to reply and to provide the service you ask for. We do not sell them.</p>
 <h2>Third parties</h2><p>Pages load fonts from Google Fonts, which means Google receives your browser's request. WhatsApp links open WhatsApp, which has its own privacy policy.</p>
@@ -1118,6 +1119,26 @@ import re as _re, datetime as _dt
 def _slugify(t):
     s = _re.sub(r"[^a-z0-9]+", "-", t.lower()).strip("-")
     return s[:60].strip("-") or "post"
+
+def _post_excerpt(title, flat):
+    t = flat.strip()
+    # drop a leading repeat of the title (with or without the year), then any joining punctuation
+    for cand in (title, _re.sub(r"\s*\b20\d\d\b", "", title)):
+        c = cand.strip().rstrip(".")
+        if c and t.lower().startswith(c.lower()):
+            t = t[len(c):]
+            break
+    t = _re.sub(r"^[\s,.:;\-\u2013\u2014]+", "", t)
+    t = _re.sub(r"^20\d\d[\s,.:;\-]*", "", t)
+    if t:
+        t = t[0].upper() + t[1:]
+    if len(t) <= 155:
+        return t
+    cut = t[:155]
+    i = max(cut.rfind(". "), cut.rfind("? "), cut.rfind("! "))
+    if i >= 70:
+        return cut[:i + 1]
+    return cut[:cut.rfind(" ")].rstrip(" ,;:-") + "\u2026"
 
 def _load_posts():
     fp = os.path.join(HERE, "posts.json")
@@ -1138,7 +1159,7 @@ def _load_posts():
         used.add(slug)
         paras = [x.strip() for x in _re.split(r"\n\s*\n", text) if x.strip()]
         flat = " ".join(paras)
-        desc = flat if len(flat) <= 155 else flat[:152].rsplit(" ", 1)[0] + "..."
+        desc = _post_excerpt(title, flat)
         out.append(dict(id=r.get("id"), slug=slug, title=title, text=text, paras=paras, desc=desc, date=str(r.get("date", TODAY))[:10], url=url))
     return out
 
