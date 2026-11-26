@@ -10,6 +10,7 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 CSS = open(os.path.join(HERE, "style.css"), encoding="utf-8").read()
 import datetime
 TODAY = datetime.date.today().isoformat()
+GUIDE_DATE = "2026-10-13"
 
 PHONE1, PHONE1_TEL, PHONE1_WA = "+91 81719 99631", "+918171999631", "918171999631"
 EMAIL2 = "ravneet@revotel.in"
@@ -401,10 +402,10 @@ OFFICES = [
     dict(city="Goa", region="Goa", lines=[], maps=""),
 ]
 
-def offices_html(heading="Our offices", cls="offices"):
+def offices_html(heading="Our locations", cls="offices"):
     cards = ""
     for o in OFFICES:
-        addr = "".join(f"<span>{e(l)}</span>" for l in o["lines"]) or (f'<span class="muted">{e(o["region"])}</span>' if o["region"] != o["city"] else '<span class="muted">Address on request</span>')
+        addr = "".join(f"<span>{e(l)}</span>" for l in o["lines"]) or (f'<span class="muted">{e(o["region"])}</span>' if o["region"] != o["city"] else '<span class="muted">Team based here, available on call</span>')
         link = f'<a class="more" href="{o["maps"]}" rel="noopener" target="_blank">Open in Maps</a>' if o["maps"] else ""
         cards += f'<li><h3>{e(o["city"])}</h3><address>{addr}</address>{link}</li>'
     return f'<section class="section"><div class="split"><div class="stack"><h2>{e(heading)}</h2><p class="muted">Revotel works from Dehradun, Ghaziabad and Goa, and travels to properties across India, Dubai, Thailand, Bhutan, Sri Lanka and Nepal.</p></div><ul class="{cls}">{cards}</ul></div></section>'
@@ -468,14 +469,14 @@ def footer_html(cur):
     dst = "".join(f'<li><a href="{href(cur, "destinations/" + d["slug"])}">{e(d["name"])}</a></li>' for d in CORE_DESTS) + f'<li><a href="{href(cur, "destinations")}">All destinations</a></li>'
     return f'''<footer class="site-footer"><div class="foot-cols">
 <div class="stack" style="gap:.6rem"><a class="brand" href="{href(cur, "")}">{logo_img()}</a>
-<p class="muted" style="font-size:.95rem">Hotel revenue management and hotel technology, with consulting, content and launch support.</p>
-<p class="copyline">{PHONE1}<br>{EMAIL2}</p>
+<p class="muted" style="font-size:.95rem">Hotel revenue management and hotel technology, with consulting, content and launch support. Foodle+ (also written Foodle Plus or FP) is our hotel PMS.</p>
+<p class="copyline"><a href="tel:{PHONE1_TEL}">{PHONE1}</a><br><a href="mailto:{EMAIL2}">{EMAIL2}</a></p>
 <p class="muted" style="font-size:.9rem">{ADDR_FULL}<br>Also in Ghaziabad and Goa</p></div>
 <div><h3>Services</h3><ul>{svc}</ul></div>
 <div><h3>Technology</h3><ul>{tch}</ul></div>
 <div><h3>Destinations</h3><ul>{dst}</ul></div>
 <div><h3>Company</h3><ul><li><a href="{href(cur, "results")}">Results</a></li><li><a href="{href(cur, "insights")}">Insights</a></li><li><a href="{href(cur, "about")}">About</a></li><li><a href="{href(cur, "contact")}">Contact</a></li>
-<li><a href=LINKEDIN>LinkedIn</a></li><li><a href="https://www.facebook.com/revotel.in/">Facebook</a></li><li><a href="{href(cur, "privacy")}">Privacy</a></li></ul></div></div>
+<li><a href="{LINKEDIN}" rel="me noopener">Ravneet on LinkedIn</a></li><li><a href="https://www.facebook.com/revotel.in/">Facebook</a></li><li><a href="{href(cur, "privacy")}">Privacy</a></li></ul></div></div>
 <p class="fine">&copy; 2026 Revotel. Hotel consulting from Dehradun, Ghaziabad and Goa. Serving India, Dubai, Thailand, Bhutan, Sri Lanka and Nepal.</p></footer>'''
 
 def page(path, title, desc, body, schemas, og_type="website", noindex=False, image=None):
@@ -718,12 +719,13 @@ def guide_page(g):
     secs = "".join(f'<section class="section"><div class="split"><div class="stack"><h2>{e(h)}</h2></div><div class="stack prose">{fix(b)}</div></div></section>' for h, b in g["blocks"])
     others = "".join(f'<li><a href="{href(p, "technology/" + o["slug"])}">{e(o["h1"])}</a></li>' for o in GUIDES if o["slug"] != g["slug"])
     body = f'''<section class="hero single"><div class="stack">{crumbs_html(p, crumbs)}<h1>{e(g["h1"])}</h1><p class="lead">{e(g["intro"])}</p>
+<p class="muted" style="font-size:.92rem">By <a href="{href(p, "about")}">Ravneet Bhalla</a> &middot; Last updated 13 October 2026. Disclosure: Revotel makes Foodle+, one of the PMS options discussed here.</p>
 <div class="btn-row"><a class="btn primary" href="https://wa.me/{PHONE1_WA}?text=I%20would%20like%20a%20Foodle%2B%20demo">Book a Foodle+ demo on WhatsApp</a><a class="btn" href="{href(p, "technology/foodle-plus")}">See Foodle+</a></div></div></section>
 {secs}
 <section class="section"><div class="split"><div class="stack"><h2>Questions</h2></div>{faq_block(g["faqs"])}</div></section>
 <section class="section"><div class="split"><div class="stack"><h2>More guides</h2></div><ul class="checks">{others}<li><a href="{href(p, "technology")}">All Revotel technology</a></li></ul></div></section>
 {cta_block(p, "Find the right PMS for your hotel")}'''
-    art = {"@context": "https://schema.org", "@type": "Article", "headline": g["h1"], "description": g["desc"], "datePublished": TODAY, "dateModified": TODAY,
+    art = {"@context": "https://schema.org", "@type": "Article", "headline": g["h1"], "description": g["desc"], "datePublished": GUIDE_DATE, "dateModified": GUIDE_DATE,
            "author": {"@id": BASE + "/about/#ravneet"}, "publisher": {"@id": BASE + "/#org"},
            "mainEntityOfPage": BASE + "/" + p + "/"}
     add(p, g["title"], g["desc"], body, [ORG, art, crumb_schema(crumbs), faq_schema(g["faqs"])], og_type="article")
@@ -736,7 +738,7 @@ def hub_tech():
         f'<div><p>{e(t["short"])}</p><a class="more" href="{href(p, tpath(t))}">Explore {e(t["name"])}</a></div></div>' for t in TECH)
     grows = "".join(f'<div class="row"><div><h3><a href="{href(p, "technology/" + g["slug"])}">{e(g["h1"])}</a></h3></div><div><p>{e(g["desc"])}</p></div></div>' for g in GUIDES)
     body = f'''<section class="hero single"><div class="stack">{crumbs_html(p, crumbs)}<h1>Foodle+ cloud PMS and hotel technology</h1>
-<p class="lead">Foodle+ is our AI hotel PMS, guest experience system and POS. We pair it with channel managers we trust and a revenue team that sets the rates.</p></div></section>
+<p class="lead">Foodle+ is our AI hotel PMS, guest experience system and POS. We pair it with channel managers we trust and a revenue team that sets the rates. Foodle+ is also written Foodle Plus, or FP for short. Pricing is custom to your property and budget.</p></div></section>
 <section class="section"><div class="rows">{rows}</div></section>
 <section class="section"><div class="split"><div class="stack"><h2>Hotel PMS guides</h2><p class="muted">Plain-language help for choosing a cloud PMS.</p></div><div class="rows">{grows}</div></div></section>{cta_block(p, "See Foodle+ at your hotel")}'''
     add(p, "Foodle+ Cloud PMS & GEMS for Hotels in India | Revotel",
@@ -866,15 +868,16 @@ def contact_page():
 <p class="copyline">{PHONE1}</p><p class="copyline">{EMAIL2}</p>
 <div class="btn-row"><a class="btn primary" href="https://wa.me/{PHONE1_WA}">Open WhatsApp</a></div></div>
 <form id="enquiry" novalidate>
-<div class="two"><label for="f-name">Your name<input id="f-name" name="name" autocomplete="name"></label>
-<label for="f-phone">Phone or WhatsApp<input id="f-phone" name="phone" autocomplete="tel"></label></div>
+<div class="two"><label for="f-name">Your name *<input id="f-name" name="name" autocomplete="name" required aria-required="true"></label>
+<label for="f-phone">Phone or WhatsApp *<input id="f-phone" name="phone" autocomplete="tel" required aria-required="true"></label></div>
 <div class="two"><label for="f-prop">Property name<input id="f-prop" name="property"></label>
 <label for="f-loc">Location<input id="f-loc" name="location" placeholder="For example, Candolim, Goa"></label></div>
 <label for="f-need">What do you need?<select id="f-need" name="need">
 <option>New hotel launch</option><option>Revenue management</option><option>OTA and distribution</option><option>Reputation and reviews</option><option>Staff training</option><option>Not sure yet</option></select></label>
 <label for="f-msg">Message<textarea id="f-msg" name="message"></textarea></label>
 <div class="btn-row"><button class="btn primary" type="submit" id="send-wa">Send on WhatsApp</button><button class="btn" type="button" id="send-mail">Send by email</button></div>
-<p class="caption" id="form-note">This opens WhatsApp or your email app with your message filled in. Nothing is stored on this site.</p></form></div></section>
+<p class="caption">* Required. By sending, you agree that we may contact you about your enquiry. See our <a href="{href(p, "privacy")}">privacy page</a>. This opens WhatsApp or your email app with your message filled in. Nothing is stored on this site.</p>
+<p class="caption" id="form-note" role="status" aria-live="polite"></p></form></div></section>
 {offices_html()}'''
     script = f'''<script>
 (function(){{
@@ -883,9 +886,13 @@ def contact_page():
     var v=function(id){{return (document.getElementById(id).value||"").trim();}};
     return "Hello Revotel,\\nName: "+v("f-name")+"\\nPhone: "+v("f-phone")+"\\nProperty: "+v("f-prop")+"\\nLocation: "+v("f-loc")+"\\nNeed: "+v("f-need")+"\\n"+v("f-msg");
   }}
-  f.addEventListener("submit",function(ev){{ev.preventDefault();
+  var note=document.getElementById("form-note");
+  function ok(){{ if(!document.getElementById("f-name").value.trim()||!document.getElementById("f-phone").value.trim()){{note.textContent="Please enter your name and phone number.";return false;}} return true; }}
+  f.addEventListener("submit",function(ev){{ev.preventDefault(); if(!ok()) return;
+    note.textContent="Opening WhatsApp with your message. Just press send there. If nothing opens, message us on {PHONE1}.";
     window.open("https://wa.me/{PHONE1_WA}?text="+encodeURIComponent(text()),"_blank","noopener");}});
-  document.getElementById("send-mail").addEventListener("click",function(){{
+  document.getElementById("send-mail").addEventListener("click",function(){{ if(!ok()) return;
+    note.textContent="Opening your email app with your message. If nothing opens, write to {EMAIL2}.";
     window.location.href="mailto:{EMAIL2}?subject="+encodeURIComponent("Enquiry from revotel.in")+"&body="+encodeURIComponent(text());}});
 }})();
 </script>'''
@@ -962,7 +969,7 @@ def results_page():
 <section class="section"><div class="stack" style="gap:1.6rem"><div class="stack" style="gap:.5rem"><h2>80-room 4-star luxury beach resort</h2>
 <div class="result-meta"><span>July to September 2026 compared with July to September 2025</span><span>Online bookings through the channel manager</span></div></div>
 {kpi_row(B["rn"], B["adr"], B["rev"])}
-<div class="split"><div class="stack"><h3>Same period last year = 100</h3><p class="muted">Room nights and ADR each grew by about a third. Together they raised revenue by more than two thirds.</p></div>
+<div class="split"><div class="stack"><h3>Same period last year = 100</h3><p class="muted">Room nights and ADR each grew by about 30%. Together they raised revenue by more than two thirds.</p></div>
 <div class="stack">{index_chart(B["rn"], B["adr"], B["rev"])}
 <p class="caption">Revenue is before tax. *RevPAR is calculated on 80 rooms in both periods, so its growth matches revenue growth.</p></div></div></div></section>
 
@@ -1078,7 +1085,7 @@ def hub_insights():
     prow = "".join(
         f'<div class="row"><div><h3><a href="{href(p, "insights/" + o["slug"])}">{e(o["title"])}</a></h3><p class="muted">{_pretty_date(o["date"])}</p></div>'
         f'<div><p>{e(o["desc"])}</p></div></div>' for o in POSTS)
-    posts_sec = f'<section class="section"><div class="split"><div class="stack"><h2>Latest posts</h2><p class="muted">Short notes from Ravneet Bhalla on hotel revenue, distribution and technology. Also on <a href=LINKEDIN rel="noopener">LinkedIn</a>.</p></div><div class="rows">{prow}</div></div></section>' if POSTS else ""
+    posts_sec = f'<section class="section"><div class="split"><div class="stack"><h2>Latest posts</h2><p class="muted">Short notes from Ravneet Bhalla on hotel revenue, distribution and technology. Also on <a href="{LINKEDIN}" rel="me noopener">LinkedIn</a>.</p></div><div class="rows">{prow}</div></div></section>' if POSTS else ""
     rows = "".join(
         f'<div class="row"><div><h3><a href="{href(p, "insights/" + a["slug"])}">{e(a["h1"])}</a></h3></div>'
         f'<div><p>{e(a["intro"])}</p></div></div>' for a in ARTICLES)
@@ -1093,11 +1100,14 @@ def hub_insights():
 def privacy_page():
     p = "privacy"
     crumbs = [("Home", ""), ("Privacy", "privacy")]
-    body = f'''<section class="hero single"><div class="stack">{crumbs_html(p, crumbs)}<h1>Privacy</h1><p class="muted">Last updated 6 October 2026</p></div></section>
+    body = f'''<section class="hero single"><div class="stack">{crumbs_html(p, crumbs)}<h1>Privacy</h1><p class="muted">Last updated 26 November 2026</p></div></section>
 <section class="section"><div class="prose">
 <h2>What this site collects</h2><p>This site does not store your details. The contact form creates a message on your own device and opens WhatsApp or your email app. Nothing you type is sent to our servers until you send the message yourself.</p>
 <h2>Messages you send us</h2><p>When you contact us on WhatsApp, by email or by phone, we use your details only to reply and to provide the service you ask for. We do not sell them.</p>
 <h2>Third parties</h2><p>Pages load fonts from Google Fonts, which means Google receives your browser's request. WhatsApp links open WhatsApp, which has its own privacy policy.</p>
+<h2>Cookies, chat and analytics</h2><p>This site uses a live chat widget from Tawk.to. When it loads, Tawk.to may set cookies and receive your IP address, browser details and anything you type in the chat. Their privacy policy applies to that data. Chats are monitored by Revotel so we can reply. You can block cookies in your browser settings and still use the site, or contact us directly on WhatsApp or email instead.</p>
+<h2>How long we keep messages</h2><p>We keep enquiry messages and chat transcripts for as long as needed to respond and to run any service you ask for, and delete them on request.</p>
+<h2>Your rights and deletion requests</h2><p>To see, correct or delete what we hold about you, email {EMAIL2} from the address you used. We will respond within a reasonable time.</p>
 <h2>Client data</h2><p>Results shown on this site come from client booking data, with hotel names and guest details removed.</p>
 <h2>Contact</h2><p>Questions about this page: {EMAIL2}.</p></div></section>'''
     add(p, "Privacy | Revotel", "How Revotel handles information on this website.", body, [ORG, crumb_schema(crumbs)])
