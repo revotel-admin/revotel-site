@@ -77,6 +77,7 @@ function clean(b) {
 
 exports.handler = async (event) => {
   if (event.httpMethod !== "POST") return json(405, { error: "POST only" });
+  if ((event.body || "").length > 100000) return json(413, { error: "Request too large" });
   let b;
   try { b = JSON.parse(event.body || "{}"); } catch (e) { return json(400, { error: "Bad request" }); }
   if (!passwordOk(b.password)) { await sleep(1200); return json(401, { error: "Wrong password." }); }

@@ -1388,5 +1388,6 @@ if not PREVIEW:
         "/*\n  X-Content-Type-Options: nosniff\n  X-Frame-Options: SAMEORIGIN\n  Referrer-Policy: strict-origin-when-cross-origin\n"
         "  Permissions-Policy: camera=(), microphone=(), geolocation=(), payment=()\n  Strict-Transport-Security: max-age=31536000\n"
         "/images/*\n  Cache-Control: public, max-age=604800\n/css/*\n  Cache-Control: public, max-age=3600\n"
-        "/admin/*\n  X-Robots-Tag: noindex, nofollow\n  Cache-Control: no-store\n")
+        "/admin/*\n  X-Robots-Tag: noindex, nofollow\n  Cache-Control: no-store\n  X-Frame-Options: DENY\n"
+        "  Content-Security-Policy: default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; connect-src 'self'; img-src 'self' data:; base-uri 'none'; form-action 'none'; frame-ancestors 'none'\n")
 print(len(PAGES), "pages ->", OUT)
