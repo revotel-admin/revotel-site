@@ -486,10 +486,14 @@ def footer_html(cur):
 <li><a href="{LINKEDIN}" rel="me noopener">Ravneet on LinkedIn</a></li><li><a href="https://www.facebook.com/revotel.in/">Facebook</a></li><li><a href="{href(cur, "privacy")}">Privacy</a></li></ul></div></div>
 <p class="fine">&copy; 2026 Revotel. Hotel consulting from Dehradun, Ghaziabad and Goa. Serving India, Dubai, Thailand, Bhutan, Sri Lanka and Nepal.</p></footer>'''
 
+def _ld(obj):
+    # JSON-LD inside a <script>: escape <, > and & so text from posts can never close the tag
+    return json.dumps(obj, ensure_ascii=False).replace("<", "\\u003c").replace(">", "\\u003e").replace("&", "\\u0026")
+
 def page(path, title, desc, body, schemas, og_type="website", noindex=False, image=None):
     canon = BASE + ("/" if path == "" else "/" + path + "/")
     css = f"<style>{CSS}</style>" if PREVIEW else f'<link rel="stylesheet" href="/css/style.css">'
-    ld = "".join(f'<script type="application/ld+json">{json.dumps(s, ensure_ascii=False)}</script>' for s in schemas)
+    ld = "".join(f'<script type="application/ld+json">{_ld(s)}</script>' for s in schemas)
     robots = '<meta name="robots" content="noindex">' if noindex else '<meta name="robots" content="index, follow, max-image-preview:large">'
     return f'''<!doctype html>
 <html lang="en-IN">
